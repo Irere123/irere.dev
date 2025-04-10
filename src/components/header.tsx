@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, At, Moon, SealCheck } from '@phosphor-icons/react';
+import { ArrowLeft, At, Moon, SealCheck, Numpad } from '@phosphor-icons/react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -16,8 +16,11 @@ export default function Header() {
 
   return (
     <header
-      className={`flex items-center justify-between px-4 py-2 sticky top-0 bg-transparent z-50 ${isScrolled ? 'bg-transparent' : ''}`}
+      className={`flex items-center justify-between px-4 py-2 sticky top-0 bg-transparent z-50 ${isScrolled ? 'sm:bg-transparent bg-white' : ''}`}
     >
+      <div className="sm:hidden flex">
+        <Button icon={<Numpad size={24} />} />
+      </div>
       {!isHome && (
         <Button
           icon={<ArrowLeft size={20} />}
@@ -27,7 +30,7 @@ export default function Header() {
       )}
       {isHome && (
         <div
-          className={`relative flex items-center gap-4 ${isScrolled ? 'h-10 w-10' : 'h-14 w-14'}`}
+          className={`relative flex items-center gap-4 ${isScrolled ? 'sm:h-10 sm:w-10 h-14 w-14' : 'h-14 w-14'}`}
         >
           <Image
             src="/avatar.png"
