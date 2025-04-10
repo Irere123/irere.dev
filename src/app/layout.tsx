@@ -7,7 +7,11 @@ import Header from "@/components/header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Irere Emmanuel",
+  title: {
+    absolute: "Irere Emmanuel",
+    default: "Irere Emmanuel",
+    template: "%s | Irere Emmanuel"
+  },
   description: "Software engineer.",
 };
 

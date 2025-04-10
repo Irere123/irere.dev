@@ -8,23 +8,25 @@ const buttonVariants = {
   primary:
     'bg-blue-500 hover:bg-blue-600 transition-colors rounded-3xl py-2 px-4 text-white',
   secondary:
-    'bg-white hover:bg-white hover:shadow transition-shadow rounded-3xl py-2 px-4',
+    'bg-white hover:bg-white hover:shadow transition-shadow rounded-3xl py-2 px-4 disabled:text-neutral-400',
 } as const;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ReactNode;
   variant?: keyof typeof buttonVariants;
+  className?: string;
 }
 
 export default function Button({
   icon,
+  className,
   variant = 'default',
   ...props
 }: ButtonProps) {
   return (
     <button
       type="button"
-      className={cn(buttonVariants.default, buttonVariants[variant])}
+      className={cn(buttonVariants.default, buttonVariants[variant], className)}
       {...props}
     >
       {icon}

@@ -9,14 +9,17 @@ import {
 } from '@phosphor-icons/react';
 
 import Button from './ui/button';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Hero() {
+  const router = useRouter();
   return (
     <section className="max-w-[880px] mx-auto">
       <p className="text-lg text-neutral-600 mb-3">Irere&apos;s Portfolio</p>
       <div className="grid md:grid-cols-3 gap-3 sm:grid-cols-2 h-[450px]">
         <div className="flex flex-col gap-3 h-full">
-          <div className="flex flex-col flex-1 bg-neutral-100 rounded-2xl p-4">
+          <div className="flex flex-col flex-1 bg-[#f4f4f4] rounded-2xl p-4">
             <div className="flex flex-1">
               <p>Pic</p>
             </div>
@@ -29,12 +32,16 @@ export default function Hero() {
               </p>
             </div>
           </div>
-          <div className="bg-neutral-100 rounded-2xl p-4 flex flex-col justify-center items-center gap-2 hover:rotate-3 transition-transform duration-300 cursor-pointer">
+          <Link href={"/about"} className="bg-[#f4f4f4] rounded-2xl p-4 flex flex-col justify-center items-center gap-2 hover:rotate-3 transition-transform duration-300 cursor-pointer">
             <h2 className="text-2xl font-medium text-neutral-800">About me</h2>
-            <Button icon={<ArrowRight size={20} />} variant="secondary" />
-          </div>
+            <Button
+              icon={<ArrowRight size={20} weight='bold' />}
+              variant="secondary"
+              onClick={() => router.push('/about')}
+            />
+          </Link>
         </div>
-        <div className="flex flex-col gap-3 h-full bg-neutral-100 rounded-2xl p-4">
+        <div className="flex flex-col gap-3 h-full bg-[#f4f4f4] rounded-2xl p-4">
           <div className="flex flex-1 flex-col gap-2">
             <p>Pic</p>
           </div>
@@ -46,12 +53,16 @@ export default function Hero() {
               AI, Web, and more...
             </p>
             <div>
-              <Button icon={<ArrowRight size={20} />} variant="secondary" />
+              <Button
+                icon={<ArrowRight size={20} />}
+                variant="secondary"
+                onClick={() => router.push('/projects')}
+              />
             </div>
           </div>
         </div>
         <div className="flex flex-col gap-3 h-full">
-          <div className="flex flex-col gap-3 flex-1 bg-neutral-100 rounded-2xl p-4 hover:-rotate-2 transition-transform duration-300 cursor-pointer">
+          <div className="flex flex-col gap-3 flex-1 bg-[#f4f4f4] rounded-2xl p-4 hover:-rotate-2 transition-transform duration-300 cursor-pointer">
             <div className="flex flex-1">
               <p>Pic</p>
             </div>
@@ -63,11 +74,15 @@ export default function Hero() {
                 I could help you with a few things...
               </p>
               <div>
-                <Button icon={<ArrowRight size={20} />} variant="secondary" />
+                <Button
+                  icon={<ArrowRight size={20} />}
+                  variant="secondary"
+                  onClick={() => router.push('/services')}
+                />
               </div>
             </div>
           </div>
-          <div className="bg-neutral-100 rounded-2xl px-4 py-6 flex items-center justify-evenly gap-2 cursor-pointer hover:rotate-3 transition-transform duration-300">
+          <div className="bg-[#f4f4f4] rounded-2xl px-4 py-6 flex items-center justify-evenly gap-2 cursor-pointer hover:rotate-3 transition-transform duration-300">
             <LinkedinLogo size={28} weight="fill" />
             <GithubLogo size={28} weight="fill" />
             <DribbbleLogo size={28} weight="fill" />
