@@ -18,9 +18,11 @@ export default function Header() {
     <header
       className={`flex items-center justify-between px-4 py-2 sticky top-0 bg-transparent z-50 ${isScrolled ? 'sm:bg-transparent bg-white' : ''}`}
     >
-      <div className="sm:hidden flex">
-        <Button icon={<Numpad size={24} />} />
-      </div>
+      {isHome && (
+        <div className="sm:hidden flex">
+          <Button icon={<Numpad size={24} />} />
+        </div>
+      )}
       {!isHome && (
         <Button
           icon={<ArrowLeft size={20} />}
