@@ -8,6 +8,7 @@ import {
 import Header from '@/components/header';
 import appCss from '@/styles/globals.css?url';
 import { seo } from '@/lib/utils';
+import Providers from '@/components/providers';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -54,10 +55,12 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        <Header />
-        {children}
-        <Scripts />
+      <body className="bg-white dark:bg-neutral-950">
+        <Providers>
+          <Header />
+          {children}
+          <Scripts />
+        </Providers>
       </body>
     </html>
   );

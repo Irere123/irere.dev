@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 const buttonVariants = {
   default:
-    'bg-neutral-100 hover:bg-neutral-200 transition-colors rounded-3xl py-2 px-4',
+    'bg-[#f4f4f4] transition-all duration-300 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 transition-colors rounded-3xl py-2 px-4',
   primary:
     'bg-blue-500 hover:bg-blue-600 transition-colors rounded-3xl py-2 px-4 text-white',
   secondary:

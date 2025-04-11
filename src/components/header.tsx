@@ -1,9 +1,9 @@
-import { ArrowLeft, At, Moon, SealCheck, Numpad } from '@phosphor-icons/react';
+import { ArrowLeft, At, SealCheck, Numpad } from '@phosphor-icons/react';
 
 import useScroll from '@/hooks/use-scroll';
 import Button from './ui/button';
 import { useRouter, useLocation } from '@tanstack/react-router';
-
+import ThemeToggle from './theme-toggle';
 export default function Header() {
   const isScrolled = useScroll();
   const router = useRouter();
@@ -45,7 +45,7 @@ export default function Header() {
       )}
       <div className="flex items-center gap-2">
         <Button icon={<At size={20} />} />
-        <Button icon={<Moon size={20} />} />
+        <ThemeToggle />
       </div>
     </header>
   );
