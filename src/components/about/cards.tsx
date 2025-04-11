@@ -1,17 +1,11 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  FigmaLogo,
-  GoogleChromeLogo,
-  NotionLogo,
-  Warning,
-  XLogo,
-} from '@phosphor-icons/react';
+import { ArrowLeft, ArrowRight, Warning, XLogo } from '@phosphor-icons/react';
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 import Button from '../ui/button';
 import { ABOUT_ME_SLIDES } from '@/lib/constants';
+import { Chrome, Obsidian, PersonSitting } from '../svgs';
+import Vscode from '../svgs/vscode';
 
 export default function Cards() {
   const date = useMemo(() => new Date(), []);
@@ -40,9 +34,9 @@ export default function Cards() {
               Softwares I use as part of development process.
             </h3>
             <div className="flex gap-3">
-              <FigmaLogo size={32} />
-              <GoogleChromeLogo size={32} />
-              <NotionLogo size={32} />
+              <Vscode width={32} height={32} />
+              <Chrome width={32} height={32} />
+              <Obsidian width={32} height={32} />
               <XLogo size={32} />
             </div>
           </div>
@@ -58,8 +52,8 @@ export default function Cards() {
           </div>
         </div>
         <div className="flex flex-col bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-6 sm:hover:rotate-2 transition-transform duration-200 cursor-pointer">
-          <div className="flex flex-1 flex-col">
-            <p>Pic</p>
+          <div className="flex flex-1 flex-col justify-center items-center">
+            <PersonSitting className="w-full h-full max-w-[200px] max-h-[200px]" />
           </div>
           <div className="flex flex-col gap-2 justify-center items-center text-center">
             <h2 className="text-2xl font-semibold">Get in touch</h2>
