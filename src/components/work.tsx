@@ -75,7 +75,7 @@ export default function Works() {
 
   return (
     <div className="w-full mt-12">
-      <p className="text-lg text-neutral-400 dark:text-neutral-200 font-medium tracking-tight sm:px-0 px-4 mb-8 max-w-[880px] mx-auto">
+      <p className="text-lg text-neutral-400 dark:text-neutral-200 font-serif font-semibold sm:px-0 px-4 mb-8 max-w-[880px] mx-auto">
         Select work &lsquo;{date.getFullYear().toString().slice(2)} —
       </p>
       <div className="w-full overflow-hidden">

@@ -12,8 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as ServicesIndexImport } from './routes/services/index'
 import { Route as ProjectsIndexImport } from './routes/projects/index'
+import { Route as ExperimentsIndexImport } from './routes/experiments/index'
 import { Route as AboutIndexImport } from './routes/about/index'
 
 // Create/Update Routes
@@ -24,15 +24,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ServicesIndexRoute = ServicesIndexImport.update({
-  id: '/services/',
-  path: '/services/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const ProjectsIndexRoute = ProjectsIndexImport.update({
   id: '/projects/',
   path: '/projects/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ExperimentsIndexRoute = ExperimentsIndexImport.update({
+  id: '/experiments/',
+  path: '/experiments/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,18 +60,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutIndexImport
       parentRoute: typeof rootRoute
     }
+    '/experiments/': {
+      id: '/experiments/'
+      path: '/experiments'
+      fullPath: '/experiments'
+      preLoaderRoute: typeof ExperimentsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/projects/': {
       id: '/projects/'
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/services/': {
-      id: '/services/'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -82,46 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/experiments': typeof ExperimentsIndexRoute
   '/projects': typeof ProjectsIndexRoute
-  '/services': typeof ServicesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/experiments': typeof ExperimentsIndexRoute
   '/projects': typeof ProjectsIndexRoute
-  '/services': typeof ServicesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about/': typeof AboutIndexRoute
+  '/experiments/': typeof ExperimentsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
-  '/services/': typeof ServicesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/projects' | '/services'
+  fullPaths: '/' | '/about' | '/experiments' | '/projects'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/projects' | '/services'
-  id: '__root__' | '/' | '/about/' | '/projects/' | '/services/'
+  to: '/' | '/about' | '/experiments' | '/projects'
+  id: '__root__' | '/' | '/about/' | '/experiments/' | '/projects/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutIndexRoute: typeof AboutIndexRoute
+  ExperimentsIndexRoute: typeof ExperimentsIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
-  ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutIndexRoute: AboutIndexRoute,
+  ExperimentsIndexRoute: ExperimentsIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
-  ServicesIndexRoute: ServicesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -136,8 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about/",
-        "/projects/",
-        "/services/"
+        "/experiments/",
+        "/projects/"
       ]
     },
     "/": {
@@ -146,11 +146,11 @@ export const routeTree = rootRoute
     "/about/": {
       "filePath": "about/index.tsx"
     },
+    "/experiments/": {
+      "filePath": "experiments/index.tsx"
+    },
     "/projects/": {
       "filePath": "projects/index.tsx"
-    },
-    "/services/": {
-      "filePath": "services/index.tsx"
     }
   }
 }

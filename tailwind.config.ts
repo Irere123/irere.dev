@@ -9,6 +9,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Instrument Sans', 'sans-serif'],
+        serif: ['Instrument Serif', 'serif'],
+      },
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
