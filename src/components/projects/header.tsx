@@ -1,6 +1,4 @@
-'use client';
-
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 
 export default function Header() {
   return (
@@ -10,7 +8,7 @@ export default function Header() {
       <p>
         Got an Idea for a Project?{' '}
         <Link
-          href="/services"
+          to="/services"
           className="text-neutral-800 underline font-semibold"
         >
           Let&apos;s build it

@@ -2,30 +2,36 @@
   "name": "irere.dev",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
+    "@tanstack/react-router": "^1.115.2",
+    "@tanstack/react-start": "^1.115.2",
     "clsx": "^2.1.1",
     "motion": "^12.6.3",
-    "next": "15.3.0",
+    "next-themes": "^0.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "tailwind-merge": "^3.2.0"
+    "tailwind-merge": "^3.2.0",
+    "vinxi": "^0.5.4"
   },
   "devDependencies": {
+    "@tanstack/react-router-devtools": "^1.115.2",
+    "@tanstack/router-plugin": "^1.115.2",
     "@types/node": "^20",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^8",
-    "eslint-config-next": "15.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "packageManager": "pnpm@10.2.0+sha512.0d27364e0139c6aadeed65ada153135e0ca96c8da42123bd50047f961339dc7a758fc2e944b428f52be570d1bd3372455c1c65fa2e7aa0bfbf931190f9552001"
 }

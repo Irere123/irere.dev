@@ -1,18 +1,15 @@
-'use client';
-
 import { ArrowLeft, At, Moon, SealCheck, Numpad } from '@phosphor-icons/react';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
 
 import useScroll from '@/hooks/use-scroll';
 import Button from './ui/button';
+import { useRouter, useLocation } from '@tanstack/react-router';
 
 export default function Header() {
   const isScrolled = useScroll();
-  const pathname = usePathname();
   const router = useRouter();
+  const location = useLocation();
 
-  const isHome = pathname === '/';
+  const isHome = location.pathname === '/';
 
   return (
     <header
@@ -26,18 +23,17 @@ export default function Header() {
       {!isHome && (
         <Button
           icon={<ArrowLeft size={20} />}
-          onClick={() => router.back()}
+          onClick={() => router.navigate({ to: '/' })}
           className="hover:shadow transition-shadow"
         />
       )}
       {isHome && (
         <div
-          className={`relative flex items-center gap-4 ${isScrolled ? 'sm:h-10 sm:w-10 h-14 w-14' : 'h-14 w-14'}`}
+          className={`relative flex items-center transition-all duration-300 gap-4 ${isScrolled ? 'sm:h-10 sm:w-10 h-14 w-14' : 'h-14 w-14'}`}
         >
-          <Image
+          <img
             src="/avatar.png"
             alt="Irere Emmanuel"
-            fill
             className="rounded-full"
           />
           <SealCheck

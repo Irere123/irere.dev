@@ -1,4 +1,3 @@
-'use client';
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,7 +8,6 @@ import {
   XLogo,
 } from '@phosphor-icons/react';
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 
 import Button from '../ui/button';
@@ -65,26 +63,26 @@ export default function Cards() {
           </div>
           <div className="flex flex-col gap-2 justify-center items-center text-center">
             <h2 className="text-2xl font-semibold">Get in touch</h2>
-            <Link
+            <a
               href={'mailto:hello@irere.dev'}
               className="text-lg font-semibold hover:underline text-neutral-400"
             >
               hello@irere.dev
-            </Link>
-            <Link
+            </a>
+            <a
               href={'https://github.com/irere123'}
               target="_blank"
               className="text-lg font-semibold hover:underline text-neutral-400"
             >
               Follow me on Github
-            </Link>
-            <Link
+            </a>
+            <a
               href={'https://x.com/irere_emmanuel'}
               target="_blank"
               className="text-lg font-semibold hover:underline text-neutral-400"
             >
               Follow me on X
-            </Link>
+            </a>
           </div>
         </div>
         <div className="flex flex-col h-full gap-3">

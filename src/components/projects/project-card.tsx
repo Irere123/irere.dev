@@ -1,10 +1,7 @@
-'use client';
-
-import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowRight } from '@phosphor-icons/react';
 
 import Button from '../ui/button';
+import { Link } from '@tanstack/react-router';
 
 export interface ProjectCardProps {
   title: string;
@@ -21,7 +18,7 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Link
-      href={link}
+      to={link}
       className="bg-[#f4f4f4] rounded-2xl p-6 flex flex-col gap-4 h-[500px]"
     >
       <div className="flex flex-col gap-4 items-center mt-3">
@@ -31,7 +28,7 @@ export default function ProjectCard({
           <Button icon={<ArrowRight />} variant="secondary" />
         </div>
       </div>
-      <Image src={image} alt={title} width={100} height={100} />
+      <img src={image} alt={title} />
     </Link>
   );
 }

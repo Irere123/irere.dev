@@ -1,8 +1,6 @@
-'use client';
-
 import { useMemo } from 'react';
-import Image from 'next/image';
 import { motion } from 'motion/react';
+import { cn } from '@/lib/utils';
 
 type WorkItem = {
   image: string;
@@ -48,63 +46,57 @@ export default function Works() {
   ) => {
     const isMobile = work.type === 'mobile';
 
-    const frameContainerClasses =
-      'relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer p-1.5 flex items-center justify-center';
-
-    const frameClasses = `relative h-full rounded-xl overflow-hidden ${
-      isMobile ? 'w-[60%]' : 'w-full bg-neutral-100'
-    }`;
-
-    const imageClasses = `group-hover:opacity-80 transition-opacity rounded-lg ${
-      isMobile ? 'object-contain' : 'object-cover'
-    }`;
+    const cardWidthClass = isMobile ? 'w-[300px]' : 'w-[720px]';
 
     return (
-      <li
+      <motion.li
         key={`work-${index}-${work.title}`}
-        className="flex-shrink-0 w-[90vw] h-[90vw] sm:w-[80vw] sm:h-[90vw] md:w-[640px] md:h-[660px] select-none"
+        className={`flex-shrink-0 ${cardWidthClass} h-[550px] select-none`}
         aria-hidden={isAriaHidden}
       >
-        <div className={frameContainerClasses}>
-          <div className={frameClasses}>
-            <Image
+        <div className="relative w-full h-full p-2">
+          <div className="relative w-full h-full rounded-xl overflow-hidden">
+            <img
               src={work.image}
               alt={`${work.title} - ${work.description}`}
-              fill
-              className={imageClasses}
-              priority={index < works.length}
+              className={cn(
+                'w-full h-full object-cover',
+                isMobile && 'object-contain',
+              )}
             />
           </div>
         </div>
-      </li>
+      </motion.li>
     );
   };
 
   return (
     <div className="w-full mt-12">
-      <p className="text-lg text-neutral-400 font-medium tracking-tight mb-3 max-w-[880px] mx-auto sm:px-0 px-4">
+      <p className="text-lg text-neutral-400 font-medium tracking-tight mb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         Select work &lsquo;{date.getFullYear().toString().slice(2)} —
       </p>
       <div className="w-full overflow-hidden">
-        <section className="flex w-full items-center py-3">
+        <motion.div
+          className="py-4"
+          whileHover={{ animationPlayState: 'paused' }}
+        >
           <motion.ul
-            className="flex list-none p-0 m-0 gap-2 sm:gap-4"
+            className="flex gap-4"
             animate={{
-              x: ['0%', '-100%'],
+              x: ['0%', '-50%'],
             }}
             transition={{
+              duration: 20,
               ease: 'linear',
-              duration: 40 * (works.length / 4),
               repeat: Number.POSITIVE_INFINITY,
             }}
-            whileHover={{ animationPlayState: 'paused' }}
           >
             {works.map((work, index) => renderWorkItem(work, index))}
             {works.map((work, index) =>
               renderWorkItem(work, index + works.length, true),
             )}
           </motion.ul>
-        </section>
+        </motion.div>
       </div>
     </div>
   );
