@@ -4,6 +4,8 @@ import {
   LinkedinLogo,
   XLogo,
   Pencil,
+  Hammer,
+  Briefcase,
 } from '@phosphor-icons/react';
 
 import Button from './ui/button';
@@ -19,8 +21,8 @@ export default function Hero() {
       <div className="grid md:grid-cols-3 gap-3 sm:grid-cols-2 h-[450px]">
         <div className="flex flex-col gap-3 h-full">
           <div className="flex flex-col flex-1 bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-4">
-            <div className="flex flex-1">
-              <p>Pic</p>
+            <div className="flex flex-1 justify-center items-center text-neutral-700 dark:text-neutral-200">
+              <Hammer size={100} />
             </div>
             <div className="flex flex-col text-center gap-2 justify-center items-center">
               <h2 className="text-2xl font-semibold text-neutral-800 dark:text-neutral-200">
@@ -73,8 +75,8 @@ export default function Hero() {
         </div>
         <div className="flex flex-col gap-3 h-full">
           <div className="flex flex-col gap-3 flex-1 bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-4 hover:-rotate-2 transition-transform duration-300 cursor-pointer">
-            <div className="flex flex-1">
-              <p>Pic</p>
+            <div className="flex flex-1 justify-center items-center text-neutral-700 dark:text-neutral-200">
+              <Briefcase size={100} />
             </div>
             <div className="flex flex-col text-center gap-2 justify-center items-center">
               <h2 className="text-2xl font-semibold text-neutral-800 dark:text-neutral-200">

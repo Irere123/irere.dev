@@ -11,10 +11,10 @@ type WorkItem = {
 
 const works = [
   {
-    image: '/images/mentor.png',
+    image: '/images/work-1.webp',
     title: 'Project 1',
     description: 'Description of Project 1',
-    type: 'web' as const,
+    type: 'mobile' as const,
   },
   {
     image: '/images/phone.webp',
@@ -23,16 +23,22 @@ const works = [
     type: 'mobile' as const,
   },
   {
-    image: '/images/mentor.png',
+    image: '/images/work-2.webp',
     title: 'Project 3',
     description: 'Description of Project 3',
     type: 'desktop' as const,
   },
   {
-    image: '/images/mentor.png',
+    image: '/images/work-3.avif',
     title: 'Project 4',
     description: 'Description of Project 4',
-    type: 'web' as const,
+    type: 'mobile' as const,
+  },
+  {
+    image: '/images/work-4.webp',
+    title: 'Project 5',
+    description: 'Description of Project 5',
+    type: 'desktop' as const,
   },
 ];
 
@@ -59,10 +65,7 @@ export default function Works() {
             <img
               src={work.image}
               alt={`${work.title} - ${work.description}`}
-              className={cn(
-                'w-full h-full object-cover',
-                isMobile && 'object-contain',
-              )}
+              className={cn('w-full h-full object-contain')}
             />
           </div>
         </div>
