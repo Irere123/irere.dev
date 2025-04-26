@@ -2,7 +2,7 @@ import { SealCheck } from '@phosphor-icons/react';
 
 export default function AboutInfo() {
   return (
-    <div className="max-w-screen-md mx-auto w-full">
+    <div className="max-w-screen-md mx-auto w-full mt-12">
       <div className="flex items-center flex-col gap-6">
         <div
           className={`relative flex items-center gap-4 h-24 w-24 border border-gray-300 dark:border-gray-700 rounded-full shadow-sm`}
@@ -33,7 +33,7 @@ export default function AboutInfo() {
           <p>
             I&lsquo;m currently{' '}
             <strong className="text-neutral-800 dark:text-neutral-200">
-              Freelancing
+              coding
             </strong>
             . In my spare time, I work on personal side projects and create
             high-quality, free open-source software for the community.

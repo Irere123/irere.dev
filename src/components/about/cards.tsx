@@ -29,7 +29,7 @@ export default function Cards() {
       <h3 className="text-neutral-400 mb-3 dark:text-neutral-200">More —</h3>
       <div className="grid md:grid-cols-3 gap-3 sm:grid-cols-2 h-96">
         <div className="flex flex-col h-full gap-3">
-          <div className="flex flex-col bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-6 justify-center items-center gap-3 text-center cursor-pointer sm:hover:-rotate-2 transition-transform duration-200">
+          <div className="flex flex-col bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-6 justify-center items-center gap-3 text-center cursor-pointer">
             <h3 className="font-semibold text-neutral-400 text-lg">
               Softwares I use as part of development process.
             </h3>
@@ -40,9 +40,9 @@ export default function Cards() {
               <XLogo size={32} />
             </div>
           </div>
-          <div className="flex flex-col flex-1 gap-1 justify-center items-center bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-4 text-neutral-400 dark:text-neutral-200 cursor-pointer sm:hover:rotate-2 transition-transform duration-200">
+          <div className="flex flex-col flex-1 gap-1 justify-center items-center bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-4 text-neutral-400 dark:text-neutral-200 cursor-pointer">
             <div className="flex flex-1 justify-center items-center">
-              <p className="text-3xl italic">Signature</p>
+              <p className="text-3xl italic">IE.SYS</p>
             </div>
             <p className="h-6 w-6 bg-neutral-200 dark:bg-neutral-800 rounded-full flex justify-center items-center">
               C
@@ -51,7 +51,7 @@ export default function Cards() {
             <p className="text-sm">All rights reserved</p>
           </div>
         </div>
-        <div className="flex flex-col bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-6 sm:hover:rotate-2 transition-transform duration-200 cursor-pointer">
+        <div className="flex flex-col bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-6 cursor-pointer">
           <div className="flex flex-1 flex-col justify-center items-center">
             <PersonSitting className="w-full h-full max-w-[200px] max-h-[200px]" />
           </div>
@@ -80,7 +80,7 @@ export default function Cards() {
           </div>
         </div>
         <div className="flex flex-col h-full gap-3">
-          <div className="flex flex-col bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-6 justify-center items-center text-center cursor-pointer sm:hover:-rotate-2 transition-transform duration-200">
+          <div className="flex flex-col bg-[#f4f4f4] dark:bg-neutral-900 rounded-2xl p-6 justify-center items-center text-center cursor-pointer">
             <Warning size={28} weight="fill" className="text-neutral-400" />
             <h3 className="text-xl font-semibold">Disclaimer</h3>
             <p className="text-lg text-neutral-400 font-semibold">

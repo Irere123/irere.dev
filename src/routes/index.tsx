@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Hero from '@/components/hero';
-import Works from '@/components/work';
-import Footer from '@/components/footer';
+import AboutInfo from '@/components/about/info';
+import Cards from '@/components/about/cards';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -9,10 +8,9 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   return (
-    <div>
-      <Hero />
-      <Works />
-      <Footer />
-    </div>
+    <section className="flex flex-col">
+      <AboutInfo />
+      <Cards />
+    </section>
   );
 }

@@ -5,7 +5,6 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
-import Header from '@/components/header';
 import appCss from '@/styles/globals.css?url';
 import { seo } from '@/lib/utils';
 import Providers from '@/components/providers';
@@ -57,7 +56,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       </head>
       <body className="bg-white dark:bg-neutral-950">
         <Providers>
-          <Header />
           {children}
           <Scripts />
         </Providers>
