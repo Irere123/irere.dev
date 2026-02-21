@@ -13,8 +13,9 @@ const getDeploymentDate = createServerFn().handler(() => {
 
 function App() {
   const deploymentDate = Route.useLoaderData()
+
   return (
-    <div className='min-h-screen max-w-2xl mx-auto w-full py-12'>
+    <div className='flex flex-1 flex-col max-w-2xl mx-auto w-full py-12'>
       <div className='flex flex-col gap-3'>
         <CollectionPreview />
         <div>
@@ -36,7 +37,6 @@ function App() {
           </a>
           , which creates and publishes tools for achieving interface excellence, such as cmdk.
         </p>
-        <p>I consider myself a designer at heart and enjoy building highly polished products.</p>
         <span>
           You can reach me at{' '}
           <a
