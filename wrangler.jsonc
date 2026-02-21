@@ -1,17 +1,20 @@
 {
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "irere-wwww",
-    "compatibility_date": "2025-09-02",
-    "compatibility_flags": ["nodejs_compat"],
-    "main": "@tanstack/react-start/server-entry", 
-    "routes": [
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "irere-wwww",
+  "compatibility_date": "2025-09-02",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "version_metadata": {
+    "binding": "CF_VERSION_METADATA"
+  },
+  "routes": [
     {
       "pattern": "www.irere.dev",
-      "custom_domain": true, 
+      "custom_domain": true
     },
     {
       "pattern": "irere.dev",
-      "custom_domain": true, 
+      "custom_domain": true
     }
   ]
-  }
+}

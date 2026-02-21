@@ -1,17 +1,27 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/react-start'
+import { format } from 'date-fns'
 
 import { CollectionPreview } from '@/components/collection-preview'
+import { env } from 'cloudflare:workers'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({ component: App, loader: () => getDeploymentDate() })
+
+const getDeploymentDate = createServerFn().handler(() => {
+  return new Date(env.CF_VERSION_METADATA.timestamp)
+})
 
 function App() {
+  const deploymentDate = Route.useLoaderData()
   return (
     <div className='min-h-screen max-w-2xl mx-auto w-full py-12'>
       <div className='flex flex-col gap-3'>
         <CollectionPreview />
         <div>
           <h1 className='font-bold'>Irere Emmanuel</h1>
-          <p className='text-sm text-gray-500'>Last deployed on Jan 21, 2026</p>
+          <p className='text-sm text-gray-500'>
+            Last deployed on {format(deploymentDate, 'MMM d, yyyy')}
+          </p>
         </div>
       </div>
       <article className='prose py-8'>
