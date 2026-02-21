@@ -31,6 +31,7 @@ export function Footer() {
       <p>
         <KigaliTime />
       </p>
+      <p className='text-gray-500 rounded-full bg-gray-100 px-2 py-1'>v4.0</p>
     </footer>
   )
 }

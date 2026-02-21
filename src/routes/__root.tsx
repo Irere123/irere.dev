@@ -1,6 +1,7 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { NuqsAdapter } from 'nuqs/adapters/tanstack-router'
 
 import { Footer } from '@/components/footer'
 import appCss from '../styles.css?url'
@@ -36,8 +37,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className='flex flex-col w-full h-full'>
-        {children}
-        <Footer />
+        <NuqsAdapter>
+          {children}
+          <Footer />
+        </NuqsAdapter>
         <TanStackDevtools
           config={{
             position: 'bottom-right',

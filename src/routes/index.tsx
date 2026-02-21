@@ -1,11 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { format } from 'date-fns'
+import { createStandardSchemaV1, parseAsString, useQueryStates } from 'nuqs'
+
+const searchParams = {
+  work: parseAsString.withDefault('articles'),
+}
 
 import { CollectionPreview } from '@/components/collection-preview'
+import { Work } from '@/components/work'
 import { env } from 'cloudflare:workers'
 
-export const Route = createFileRoute('/')({ component: App, loader: () => getDeploymentDate() })
+export const Route = createFileRoute('/')({
+  component: App,
+  loader: () => getDeploymentDate(),
+  validateSearch: createStandardSchemaV1(searchParams, {
+    partialOutput: true,
+  }),
+})
 
 const getDeploymentDate = createServerFn().handler(() => {
   return new Date(env.CF_VERSION_METADATA.timestamp)
@@ -13,6 +25,7 @@ const getDeploymentDate = createServerFn().handler(() => {
 
 function App() {
   const deploymentDate = Route.useLoaderData()
+  const [{ work }] = useQueryStates(searchParams)
 
   return (
     <div className='flex flex-1 flex-col max-w-2xl mx-auto w-full py-12'>
@@ -59,6 +72,7 @@ function App() {
           .
         </span>
       </article>
+      <Work work={work} />
     </div>
   )
 }
