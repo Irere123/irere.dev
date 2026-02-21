@@ -1,3 +1,4 @@
+import { BProgress } from '@bprogress/core'
 import { QueryClient } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
@@ -22,6 +23,15 @@ export function getRouter() {
     scrollRestoration: true,
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
+  })
+
+  router.subscribe('onBeforeNavigate', ({ pathChanged }) => {
+    pathChanged && BProgress.start()
+  })
+
+  // Progress bar Done
+  router.subscribe('onResolved', () => {
+    BProgress.done()
   })
 
   setupRouterSsrQueryIntegration({
