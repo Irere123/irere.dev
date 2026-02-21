@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
 
-import { formatDayMonth, getYear, type Article } from '@/lib/work'
+import { type Article, formatDayMonth, getYear } from '@/lib/work'
 import { RoughUnderline } from '@/svg/rough-underline'
 
 interface ArticlesProps {

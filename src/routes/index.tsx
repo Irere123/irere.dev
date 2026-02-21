@@ -103,7 +103,7 @@ function App() {
           <a href='https://revoks.dev' className='underline underline-offset-4'>
             Revoks
           </a>
-          , which creates and publishes tools for achieving interface excellence, such as cmdk.
+          , where we’re creating products that return time, focus, and clarity back to people.
         </motion.p>
         <motion.p variants={copyVariants}>
           You can reach me at{' '}

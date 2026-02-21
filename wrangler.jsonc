@@ -16,5 +16,8 @@
       "pattern": "irere.dev",
       "custom_domain": true
     }
-  ]
+  ],
+  "observability": {
+    "enabled": false
+  }
 }
