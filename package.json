@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit --pretty",
     "test": "vitest run",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler deploy --env production",
+    "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
