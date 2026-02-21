@@ -1,7 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { format } from 'date-fns'
+import { useMemo } from 'react'
 
+import { ArticleMarkdown } from '@/components/markdown/article-markdown'
+import { ArticleTableOfContents } from '@/components/markdown/article-table-of-contents'
+import { extractTableOfContents } from '@/components/markdown/toc-utils'
 import { articleBySlugQueryOptions } from '@/lib/article-queries'
 
 export const Route = createFileRoute('/articles/$slug')({
@@ -14,6 +18,10 @@ export const Route = createFileRoute('/articles/$slug')({
 function ArticleDetailPage() {
   const { slug } = Route.useParams()
   const { data: article } = useSuspenseQuery(articleBySlugQueryOptions(slug))
+  const tableOfContents = useMemo(
+    () => (article ? extractTableOfContents(article.content) : []),
+    [article]
+  )
 
   if (!article) {
     return (
@@ -28,6 +36,7 @@ function ArticleDetailPage() {
 
   return (
     <article className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 py-12'>
+      <ArticleTableOfContents items={tableOfContents} />
       <Link to='/articles' className='text-sm text-gray-500 hover:text-gray-900'>
         All articles
       </Link>
@@ -38,9 +47,7 @@ function ArticleDetailPage() {
         </p>
       </header>
       <div className='prose max-w-none'>
-        {article.content.map((paragraph, index) => (
-          <p key={`${article.slug}-${index}`}>{paragraph}</p>
-        ))}
+        <ArticleMarkdown markdown={article.content} />
       </div>
     </article>
   )

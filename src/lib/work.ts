@@ -5,7 +5,7 @@ export interface Article {
   title: string
   publishedAt: string
   summary: string
-  content: string[]
+  content: string
   isNew?: boolean
 }
 

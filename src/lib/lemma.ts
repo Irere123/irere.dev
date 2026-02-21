@@ -78,14 +78,14 @@ function sanitizeMarkdown(text?: string | null) {
     .trim()
 }
 
-function markdownToParagraphs(markdown?: string | null) {
+function markdownToSummary(markdown?: string | null) {
   const cleaned = sanitizeMarkdown(markdown)
   const paragraphs = cleaned
     .split(/\n{2,}/)
     .map((part) => part.trim())
     .filter(Boolean)
 
-  return paragraphs.length > 0 ? paragraphs : ['']
+  return paragraphs[0] ?? ''
 }
 
 function normalizeStatus(status?: ListDocumentsParams['status']) {
@@ -119,12 +119,13 @@ function toArticle(post: LemmaPost): Article | null {
     return null
   }
 
-  const content = markdownToParagraphs(post.markdown)
+  const content = (post.markdown ?? '').trim()
+  const summary = post.subtitle || markdownToSummary(post.markdown)
 
   return {
     slug: post.slug,
     title: post.title,
-    summary: post.subtitle || content[0] || '',
+    summary,
     content,
     publishedAt: toIsoDate(post.publishedDate || post.scheduledDate || post.createdAt),
     isNew: false,
