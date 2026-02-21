@@ -65,7 +65,7 @@ function WorkLink({
       to='/'
       search={{ work }}
       className={`${baseClasses} ${
-        isActive ? 'text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900'
+        isActive ? 'text-white' : 'bg-white text-gray-700 hover:bg-gray-200 hover:text-gray-900'
       }`}
     >
       {isActive ? (

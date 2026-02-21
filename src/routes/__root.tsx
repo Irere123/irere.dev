@@ -52,7 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className='flex flex-col w-full h-full font-sans'>
+      <body className='flex flex-col w-full h-full font-sans bg-background'>
         <NuqsAdapter>
           <MotionConfig reducedMotion='user'>
             {children}
