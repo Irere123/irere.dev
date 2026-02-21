@@ -6,6 +6,8 @@ export interface CollectionProject {
 
 export const PROFILE_PREVIEW_IMAGE = '/collection-preview/irere.png'
 
+export const LEMMA_API_URL = 'https://api.irere.dev'
+
 export const COLLECTION_PROJECTS: CollectionProject[] = [
   {
     src: '/collection-preview/Doodle2.webp',

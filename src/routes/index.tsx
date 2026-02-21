@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { format } from 'date-fns'
@@ -10,11 +11,21 @@ const searchParams = {
 
 import { CollectionPreview } from '@/components/collection-preview'
 import { Work } from '@/components/work'
+import { recentArticlesQueryOptions } from '@/lib/article-queries'
 import { env } from 'cloudflare:workers'
 
 export const Route = createFileRoute('/')({
   component: App,
-  loader: () => getDeploymentDate(),
+  loader: async ({ context }) => {
+    const [deploymentDate] = await Promise.all([
+      getDeploymentDate(),
+      context.queryClient.ensureQueryData(recentArticlesQueryOptions()),
+    ])
+
+    return {
+      deploymentDate,
+    }
+  },
   validateSearch: createStandardSchemaV1(searchParams, {
     partialOutput: true,
   }),
@@ -25,7 +36,8 @@ const getDeploymentDate = createServerFn().handler(() => {
 })
 
 function App() {
-  const deploymentDate = Route.useLoaderData()
+  const { deploymentDate } = Route.useLoaderData()
+  const { data: articles } = useSuspenseQuery(recentArticlesQueryOptions())
   const [{ work }] = useQueryStates(searchParams)
   const shouldReduceMotion = useReducedMotion()
 
@@ -116,7 +128,7 @@ function App() {
         </motion.p>
       </motion.article>
       <motion.div variants={sectionVariants}>
-        <Work work={work} />
+        <Work work={work} articles={articles} />
       </motion.div>
     </motion.main>
   )

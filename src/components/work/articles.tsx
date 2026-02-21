@@ -1,16 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
 
-import { formatDayMonth, getAllArticles, getRecentArticles, getYear } from '@/lib/work'
+import { formatDayMonth, getYear, type Article } from '@/lib/work'
 import { RoughUnderline } from '@/svg/rough-underline'
 
 interface ArticlesProps {
-  mode?: 'recent' | 'all'
   showArchiveLink?: boolean
+  articles: Article[]
 }
 
-export function Articles({ mode = 'recent', showArchiveLink = true }: ArticlesProps) {
-  const articles = mode === 'all' ? getAllArticles() : getRecentArticles()
+export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
   const shouldReduceMotion = useReducedMotion()
   let lastSeenYear = ''
 
@@ -50,8 +49,9 @@ export function Articles({ mode = 'recent', showArchiveLink = true }: ArticlesPr
           const nextArticle = articles[i + 1]
           const nextYear = nextArticle ? getYear(nextArticle.publishedAt) : null
           const isLastInYear = !nextArticle || nextYear !== year
-          const rowBorderClass =
-            isLastInYear ? 'border-b border-gray-200' : 'border-b border-gray-100'
+          const rowBorderClass = isLastInYear
+            ? 'border-b border-gray-200'
+            : 'border-b border-gray-100'
 
           return (
             <motion.li
@@ -64,6 +64,7 @@ export function Articles({ mode = 'recent', showArchiveLink = true }: ArticlesPr
                 <Link
                   to='/articles/$slug'
                   params={{ slug: article.slug }}
+                  preload='intent'
                   className='text-gray-900 transition-colors hover:text-gray-600'
                 >
                   {article.title}
@@ -86,6 +87,9 @@ export function Articles({ mode = 'recent', showArchiveLink = true }: ArticlesPr
           )
         })}
       </motion.ul>
+      {articles.length === 0 ? (
+        <p className='text-sm text-gray-500'>No published articles yet.</p>
+      ) : null}
       {showArchiveLink ? (
         <motion.div
           className='text-right'
@@ -99,6 +103,7 @@ export function Articles({ mode = 'recent', showArchiveLink = true }: ArticlesPr
         >
           <Link
             to='/articles'
+            preload='intent'
             className='text-sm text-gray-500 transition-colors hover:text-gray-900'
           >
             View all articles

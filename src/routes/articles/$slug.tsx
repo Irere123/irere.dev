@@ -1,15 +1,19 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { format } from 'date-fns'
 
-import { getArticleBySlug, isoDateToDate } from '@/lib/work'
+import { articleBySlugQueryOptions } from '@/lib/article-queries'
 
 export const Route = createFileRoute('/articles/$slug')({
+  loader: async ({ context, params }) => {
+    await context.queryClient.ensureQueryData(articleBySlugQueryOptions(params.slug))
+  },
   component: ArticleDetailPage,
 })
 
 function ArticleDetailPage() {
   const { slug } = Route.useParams()
-  const article = getArticleBySlug(slug)
+  const { data: article } = useSuspenseQuery(articleBySlugQueryOptions(slug))
 
   if (!article) {
     return (
@@ -29,11 +33,13 @@ function ArticleDetailPage() {
       </Link>
       <header className='flex flex-col gap-2'>
         <h1 className='text-3xl font-semibold text-gray-900'>{article.title}</h1>
-        <p className='text-sm text-gray-500'>{format(isoDateToDate(article.publishedAt), 'MMMM d, yyyy')}</p>
+        <p className='text-sm text-gray-500'>
+          {format(new Date(article.publishedAt), 'MMMM d, yyyy')}
+        </p>
       </header>
       <div className='prose max-w-none'>
-        {article.content.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
+        {article.content.map((paragraph, index) => (
+          <p key={`${article.slug}-${index}`}>{paragraph}</p>
         ))}
       </div>
     </article>

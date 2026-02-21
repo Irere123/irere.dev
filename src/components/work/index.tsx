@@ -1,11 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 
+import type { Article } from '@/lib/work'
 import { Geometry, Notebook } from '@/svg'
 import { Articles } from './articles'
 import { Projects } from './projects'
 
-export function Work({ work }: { work: string }) {
+export function Work({ work, articles }: { work: string; articles: Article[] }) {
   const activeWork = work === 'projects' ? 'projects' : 'articles'
   const shouldReduceMotion = useReducedMotion()
 
@@ -38,7 +39,7 @@ export function Work({ work }: { work: string }) {
           exit={{ opacity: 0, y: contentOffset * -0.5 }}
           transition={contentTransition}
         >
-          {activeWork === 'articles' ? <Articles /> : <Projects />}
+          {activeWork === 'articles' ? <Articles articles={articles} /> : <Projects />}
         </motion.div>
       </AnimatePresence>
     </div>
