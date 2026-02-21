@@ -48,41 +48,45 @@ export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
           lastSeenYear = year
           const nextArticle = articles[i + 1]
           const nextYear = nextArticle ? getYear(nextArticle.publishedAt) : null
-          const isLastInYear = !nextArticle || nextYear !== year
-          const rowBorderClass = isLastInYear
-            ? 'border-b border-gray-200'
-            : 'border-b border-gray-100'
+          const isSameYearAsNext = nextYear === year
+          const isFirstInYear = showYear && i > 0
+          const rowBorderClass = isFirstInYear ? 'border-t border-gray-200' : ''
+          const contentBorderClass = isSameYearAsNext ? 'border-b border-gray-100' : ''
 
           return (
             <motion.li
               key={article.slug}
-              className={`grid grid-cols-[64px_1fr_auto] items-center gap-3 pt-3 text-sm last:border-b-0 sm:grid-cols-[72px_1fr_auto] ${rowBorderClass}`}
+              className={`grid grid-cols-[64px_1fr_auto] items-center gap-3 pt-3 text-sm sm:grid-cols-[72px_1fr_auto] ${rowBorderClass}`}
               variants={rowVariants}
             >
               <span className='text-gray-400'>{showYear ? year : ''}</span>
-              <div className='flex items-center gap-3 pb-1'>
-                <Link
-                  to='/articles/$slug'
-                  params={{ slug: article.slug }}
-                  preload='intent'
-                  className='text-gray-900 transition-colors hover:text-gray-600'
-                >
-                  {article.title}
-                </Link>
-                {article.isNew ? (
-                  <span
-                    className='rough-annotation relative ml-1 inline-flex min-w-11 shrink-0 items-center justify-center px-2.5 py-1.5 text-xs font-medium'
-                    style={{ color: 'rgb(34, 197, 94)' }}
+              <div
+                className={`col-span-2 grid grid-cols-[1fr_auto] items-center gap-3 pb-1 ${contentBorderClass}`}
+              >
+                <div className='flex items-center gap-3'>
+                  <Link
+                    to='/articles/$slug'
+                    params={{ slug: article.slug }}
+                    preload='intent'
+                    className='text-gray-900 transition-colors hover:text-gray-600'
                   >
-                    <span className='relative z-1'>New</span>
-                    <RoughUnderline
-                      className='absolute inset-0 min-w-11'
-                      stroke='rgb(34, 197, 94)'
-                    />
-                  </span>
-                ) : null}
+                    {article.title}
+                  </Link>
+                  {article.isNew ? (
+                    <span
+                      className='rough-annotation relative ml-1 inline-flex min-w-11 shrink-0 items-center justify-center px-2.5 py-1.5 text-xs font-medium'
+                      style={{ color: 'rgb(34, 197, 94)' }}
+                    >
+                      <span className='relative z-1'>New</span>
+                      <RoughUnderline
+                        className='absolute inset-0 min-w-11'
+                        stroke='rgb(34, 197, 94)'
+                      />
+                    </span>
+                  ) : null}
+                </div>
+                <span className='text-gray-400'>{formatDayMonth(article.publishedAt)}</span>
               </div>
-              <span className='text-gray-400'>{formatDayMonth(article.publishedAt)}</span>
             </motion.li>
           )
         })}

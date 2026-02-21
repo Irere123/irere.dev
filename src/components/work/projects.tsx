@@ -48,38 +48,42 @@ export function Projects({ mode = 'recent', showArchiveLink = true }: ProjectsPr
           lastSeenYear = year
           const nextProject = projects[i + 1]
           const nextYear = nextProject ? getYear(nextProject.startedAt) : null
-          const isLastInYear = !nextProject || nextYear !== year
-          const rowBorderClass = isLastInYear
-            ? 'border-b border-gray-200'
-            : 'border-b border-gray-100'
+          const isSameYearAsNext = nextYear === year
+          const isFirstInYear = showYear && i > 0
+          const rowBorderClass = isFirstInYear ? 'border-t border-gray-200' : ''
+          const contentBorderClass = isSameYearAsNext ? 'border-b border-gray-100' : ''
 
           const dotColor = project.status === 'active' ? 'bg-emerald-500' : 'bg-red-500'
 
           return (
             <motion.li
               key={project.slug}
-              className={`grid grid-cols-[64px_1fr_auto] items-center gap-3 pt-3 text-sm last:border-b-0 sm:grid-cols-[72px_1fr_auto] ${rowBorderClass}`}
+              className={`grid grid-cols-[64px_1fr_auto] items-center gap-3 pt-3 text-sm sm:grid-cols-[72px_1fr_auto] ${rowBorderClass}`}
               variants={rowVariants}
             >
               <span className='text-gray-400'>{showYear ? year : ''}</span>
-              <div className='flex items-center gap-3 pb-1'>
-                {project.href ? (
-                  <a
-                    href={project.href}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-gray-900 transition-colors hover:text-gray-600'
-                  >
-                    {project.title}
-                  </a>
-                ) : (
-                  <span className='text-gray-900'>{project.title}</span>
-                )}
+              <div
+                className={`col-span-2 grid grid-cols-[1fr_auto] items-center gap-3 pb-1 ${contentBorderClass}`}
+              >
+                <div className='flex items-center gap-3'>
+                  {project.href ? (
+                    <a
+                      href={project.href}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='text-gray-900 transition-colors hover:text-gray-600'
+                    >
+                      {project.title}
+                    </a>
+                  ) : (
+                    <span className='text-gray-900'>{project.title}</span>
+                  )}
+                </div>
+                <span className='flex items-center gap-1.5 font-medium capitalize text-gray-400'>
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${dotColor}`} aria-hidden />
+                  {project.status}
+                </span>
               </div>
-              <span className='flex items-center gap-1.5 font-medium capitalize text-gray-400'>
-                <span className={`h-2 w-2 shrink-0 rounded-full ${dotColor}`} aria-hidden />
-                {project.status}
-              </span>
             </motion.li>
           )
         })}

@@ -1,6 +1,6 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
-import { Link, createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router'
+import { createRootRouteWithContext, HeadContent, Link, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { MotionConfig } from 'motion/react'
 import { NuqsAdapter } from 'nuqs/adapters/tanstack-router'
@@ -27,6 +27,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: 'stylesheet',
         href: appCss,
       },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap',
+      },
     ],
   }),
   notFoundComponent: RootNotFound,
@@ -39,7 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className='flex flex-col w-full h-full'>
+      <body className='flex flex-col w-full h-full font-sans'>
         <NuqsAdapter>
           <MotionConfig reducedMotion='user'>
             {children}
@@ -69,7 +82,10 @@ function RootNotFound() {
       <h1 className='text-2xl font-semibold text-gray-900'>Page not found</h1>
       <p className='text-sm text-gray-500'>The page you requested does not exist.</p>
       <div>
-        <Link to='/' className='text-sm text-gray-700 underline underline-offset-4 hover:text-gray-900'>
+        <Link
+          to='/'
+          className='text-sm text-gray-700 underline underline-offset-4 hover:text-gray-900'
+        >
           Back home
         </Link>
       </div>

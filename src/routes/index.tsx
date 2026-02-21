@@ -95,8 +95,9 @@ function App() {
         transition={{ staggerChildren: shouldReduceMotion ? 0 : 0.06 }}
       >
         <motion.p variants={copyVariants}>
-          I'm a software engineer with a design centric approach. I love to build products.
-          Currently working with blockchain technologies (aka. web3).
+          I'm a software engineer with a{' '}
+          <span className='font-serif font-medium'>design centric approach</span>. I love to build
+          products. Currently working with blockchain technologies (aka. web3).
         </motion.p>
         <motion.p variants={copyVariants}>
           I’m also a co-founder at{' '}
