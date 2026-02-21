@@ -1,6 +1,7 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { MotionConfig } from 'motion/react'
 import { NuqsAdapter } from 'nuqs/adapters/tanstack-router'
 
 import { Footer } from '@/components/footer'
@@ -38,8 +39,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className='flex flex-col w-full h-full'>
         <NuqsAdapter>
-          {children}
-          <Footer />
+          <MotionConfig reducedMotion='user'>
+            {children}
+            <Footer />
+          </MotionConfig>
         </NuqsAdapter>
         <TanStackDevtools
           config={{
