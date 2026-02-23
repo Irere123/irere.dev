@@ -65,7 +65,7 @@ function App() {
 
   return (
     <motion.main
-      className='mx-auto flex w-full max-w-2xl flex-1 flex-col py-12'
+      className='mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-10 sm:px-6 sm:py-12'
       initial='hidden'
       animate='show'
       variants={{
@@ -81,14 +81,14 @@ function App() {
       <motion.div className='flex flex-col gap-3' variants={sectionVariants}>
         <CollectionPreview />
         <div>
-          <h1 className='font-bold'>Irere Emmanuel</h1>
+          <h1 className='font-bold sm:text-base text-xl'>Irere Emmanuel</h1>
           <p className='text-sm text-gray-500'>
             Last deployed on {format(deploymentDate, 'MMM d, yyyy')}
           </p>
         </div>
       </motion.div>
       <motion.article
-        className='prose py-8'
+        className='prose py-6 sm:py-8'
         variants={sectionVariants}
         initial='hidden'
         animate='show'

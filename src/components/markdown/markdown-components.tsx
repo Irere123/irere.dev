@@ -44,14 +44,18 @@ export function createArticleMarkdownComponents({
 }: ArticleMarkdownComponentOptions): Components {
   return {
     h1: ({ children, ...props }) => (
-      <h1 className='mt-8 text-3xl font-semibold text-gray-900' {...props}>
+      <h1 className='mt-8 text-2xl font-semibold text-gray-900 sm:text-3xl' {...props}>
         {children}
       </h1>
     ),
     h2: ({ children, ...props }) => {
       const id = getHeadingId(getTextFromReactNode(children))
       return (
-        <h2 id={id} className='mt-8 scroll-mt-28 text-2xl font-semibold text-gray-900' {...props}>
+        <h2
+          id={id}
+          className='mt-8 scroll-mt-28 text-xl font-semibold text-gray-900 sm:text-2xl'
+          {...props}
+        >
           {children}
         </h2>
       )
@@ -59,7 +63,7 @@ export function createArticleMarkdownComponents({
     h3: ({ children, ...props }) => {
       const id = getHeadingId(getTextFromReactNode(children))
       return (
-        <h3 id={id} className='mt-6 scroll-mt-28 text-xl font-semibold text-gray-900' {...props}>
+        <h3 id={id} className='mt-6 scroll-mt-28 text-lg font-semibold text-gray-900 sm:text-xl' {...props}>
           {children}
         </h3>
       )

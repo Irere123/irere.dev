@@ -56,19 +56,19 @@ export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
           return (
             <motion.li
               key={article.slug}
-              className={`grid grid-cols-[64px_1fr_auto] items-center gap-3 pt-3 text-sm sm:grid-cols-[72px_1fr_auto] ${rowBorderClass}`}
+              className={`grid grid-cols-[56px_1fr] items-start gap-2.5 pt-3 text-sm sm:grid-cols-[72px_1fr] sm:items-center sm:gap-3 ${rowBorderClass}`}
               variants={rowVariants}
             >
               <span className='text-gray-400'>{showYear ? year : ''}</span>
               <div
-                className={`col-span-2 grid grid-cols-[1fr_auto] items-center gap-3 pb-1 ${contentBorderClass}`}
+                className={`grid min-w-0 pb-1 grid-cols-[1fr_auto] items-center gap-3 ${contentBorderClass}`}
               >
-                <div className='flex items-center gap-3'>
+                <div className='flex min-w-0 items-center gap-3'>
                   <Link
                     to='/articles/$slug'
                     params={{ slug: article.slug }}
                     preload='intent'
-                    className='text-gray-900 transition-colors hover:text-gray-600'
+                    className='wrap-break-word text-gray-900 transition-colors hover:text-gray-600'
                   >
                     {article.title}
                   </Link>
@@ -85,7 +85,9 @@ export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
                     </span>
                   ) : null}
                 </div>
-                <span className='text-gray-400'>{formatDayMonth(article.publishedAt)}</span>
+                <span className='text-gray-400 sm:justify-self-end hidden sm:block'>
+                  {formatDayMonth(article.publishedAt)}
+                </span>
               </div>
             </motion.li>
           )

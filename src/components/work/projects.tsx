@@ -58,28 +58,28 @@ export function Projects({ mode = 'recent', showArchiveLink = true }: ProjectsPr
           return (
             <motion.li
               key={project.slug}
-              className={`grid grid-cols-[64px_1fr_auto] items-center gap-3 pt-3 text-sm sm:grid-cols-[72px_1fr_auto] ${rowBorderClass}`}
+              className={`grid grid-cols-[56px_1fr] items-start gap-2.5 pt-3 text-sm sm:grid-cols-[72px_1fr] sm:items-center sm:gap-3 ${rowBorderClass}`}
               variants={rowVariants}
             >
               <span className='text-gray-400'>{showYear ? year : ''}</span>
               <div
-                className={`col-span-2 grid grid-cols-[1fr_auto] items-center gap-3 pb-1 ${contentBorderClass}`}
+                className={`grid min-w-0 grid-cols-1 gap-1 pb-1 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-3 ${contentBorderClass}`}
               >
-                <div className='flex items-center gap-3'>
+                <div className='flex min-w-0 items-center gap-3'>
                   {project.href ? (
                     <a
                       href={project.href}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='text-gray-900 transition-colors hover:text-gray-600'
+                      className='wrap-break-word text-gray-900 transition-colors hover:text-gray-600'
                     >
                       {project.title}
                     </a>
                   ) : (
-                    <span className='text-gray-900'>{project.title}</span>
+                    <span className='wrap-break-word text-gray-900'>{project.title}</span>
                   )}
                 </div>
-                <span className='flex items-center gap-1.5 font-medium capitalize text-gray-400'>
+                <span className='flex items-center gap-1.5 font-medium capitalize text-gray-400 sm:justify-self-end'>
                   <span className={`h-2 w-2 shrink-0 rounded-full ${dotColor}`} aria-hidden />
                   {project.status}
                 </span>

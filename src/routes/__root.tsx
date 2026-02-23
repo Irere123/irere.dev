@@ -34,7 +34,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: 'preconnect',
         href: 'https://fonts.gstatic.com',
-        crossorigin: 'anonymous',
+        crossOrigin: 'anonymous',
       },
       {
         rel: 'stylesheet',
@@ -78,7 +78,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
 function RootNotFound() {
   return (
-    <main className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 py-12'>
+    <main className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-10 sm:px-6 sm:py-12'>
       <h1 className='text-2xl font-semibold text-gray-900'>Page not found</h1>
       <p className='text-sm text-gray-500'>The page you requested does not exist.</p>
       <div>

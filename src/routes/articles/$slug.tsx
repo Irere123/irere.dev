@@ -25,7 +25,7 @@ function ArticleDetailPage() {
 
   if (!article) {
     return (
-      <div className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 py-12'>
+      <div className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-10 sm:px-6 sm:py-12'>
         <h1 className='text-2xl font-semibold text-gray-900'>Article not found</h1>
         <Link to='/articles' className='text-sm text-gray-500 hover:text-gray-900'>
           Back to article archive
@@ -35,13 +35,13 @@ function ArticleDetailPage() {
   }
 
   return (
-    <article className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 py-12'>
+    <article className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:px-6 sm:py-12'>
       <ArticleTableOfContents items={tableOfContents} />
       <Link to='/articles' className='text-sm text-gray-500 hover:text-gray-900'>
         All articles
       </Link>
       <header className='flex flex-col gap-2'>
-        <h1 className='text-3xl font-semibold text-gray-900'>{article.title}</h1>
+        <h1 className='text-2xl font-semibold text-gray-900 sm:text-3xl'>{article.title}</h1>
         <p className='text-sm text-gray-500'>
           {format(new Date(article.publishedAt), 'MMMM d, yyyy')}
         </p>

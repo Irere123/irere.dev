@@ -50,7 +50,7 @@ export const CollectionPreview = () => {
   }, [collapsePreview, isExpanded])
 
   return (
-    <div ref={containerRef} className='relative h-[72px] w-full'>
+    <div ref={containerRef} className='relative h-[72px] w-full hidden sm:block'>
       <MotionConfig transition={{ type: 'spring', stiffness: 340, damping: 30, mass: 0.8 }}>
         <AnimatePresence mode='wait' initial={false}>
           {!isExpanded ? (

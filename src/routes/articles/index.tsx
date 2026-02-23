@@ -25,7 +25,7 @@ function ArticlesArchivePage() {
 
   return (
     <motion.main
-      className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 py-12'
+      className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:px-6 sm:py-12'
       initial={{ opacity: 0, y: offset }}
       animate={{ opacity: 1, y: 0 }}
       transition={entranceTransition}
@@ -43,7 +43,7 @@ function ArticlesArchivePage() {
         >
           Back home
         </Link>
-        <h1 className='text-2xl font-semibold text-gray-900'>Article archive</h1>
+        <h1 className='text-xl font-semibold text-gray-900 sm:text-2xl'>Article archive</h1>
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
