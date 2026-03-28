@@ -6,6 +6,7 @@ dist-ssr
 .env
 .nitro
 .tanstack
+.content-collections
 .wrangler
 .output
 .vinxi

@@ -12,6 +12,7 @@ const searchParams = {
 import { CollectionPreview } from '@/components/collection-preview'
 import { Work } from '@/components/work'
 import { recentArticlesQueryOptions } from '@/lib/article-queries'
+import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 import { env } from 'cloudflare:workers'
 
 export const Route = createFileRoute('/')({
@@ -40,6 +41,7 @@ function App() {
   const { data: articles } = useSuspenseQuery(recentArticlesQueryOptions())
   const [{ work }] = useQueryStates(searchParams)
   const shouldReduceMotion = useReducedMotion()
+  const isPageAnimationReady = usePageAnimationReady()
 
   const sectionVariants = {
     hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 18 },
@@ -66,7 +68,7 @@ function App() {
   return (
     <motion.main
       className='mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-10 sm:px-6 sm:py-12'
-      initial='hidden'
+      initial={isPageAnimationReady ? 'hidden' : false}
       animate='show'
       variants={{
         hidden: {},
@@ -90,7 +92,7 @@ function App() {
       <motion.article
         className='prose py-6 sm:py-8'
         variants={sectionVariants}
-        initial='hidden'
+        initial={isPageAnimationReady ? 'hidden' : false}
         animate='show'
         transition={{ staggerChildren: shouldReduceMotion ? 0 : 0.06 }}
       >

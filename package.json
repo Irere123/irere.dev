@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build && tsc --noEmit",
+    "format": "biome format --write .",
     "typecheck": "tsc --noEmit --pretty",
     "test": "vitest run",
     "preview": "vite preview",
@@ -34,8 +35,10 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.3",
+    "@biomejs/biome": "^2.4.9",
     "@cloudflare/vite-plugin": "^1.25.2",
+    "@content-collections/core": "^0.14.3",
+    "@content-collections/vite": "^0.2.9",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/devtools-vite": "^0.3.11",
     "@testing-library/dom": "^10.4.0",
@@ -50,6 +53,7 @@
     "vite": "^7.1.7",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.5",
-    "wrangler": "^4.67.0"
+    "wrangler": "^4.67.0",
+    "zod": "^4.3.6"
   }
 }

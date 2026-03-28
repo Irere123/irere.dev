@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
 
+import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 import { type Article, formatDayMonth, getYear } from '@/lib/work'
 import { RoughUnderline } from '@/svg/rough-underline'
 
@@ -11,6 +12,7 @@ interface ArticlesProps {
 
 export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
   const shouldReduceMotion = useReducedMotion()
+  const isPageAnimationReady = usePageAnimationReady()
   let lastSeenYear = ''
 
   const listVariants = {
@@ -39,7 +41,7 @@ export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
       <motion.ul
         className='border-b border-gray-200'
         variants={listVariants}
-        initial='hidden'
+        initial={isPageAnimationReady ? 'hidden' : false}
         animate='show'
       >
         {articles.map((article, i) => {
@@ -99,7 +101,7 @@ export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
       {showArchiveLink ? (
         <motion.div
           className='text-right'
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+          initial={isPageAnimationReady ? { opacity: 0, y: shouldReduceMotion ? 0 : 8 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={
             shouldReduceMotion

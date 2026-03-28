@@ -1,3 +1,5 @@
+import { allArticles, allProjects } from 'content-collections'
+
 export type ProjectStatus = 'active' | 'failed'
 
 export interface Article {
@@ -15,103 +17,11 @@ export interface Project {
   startedAt: string
   status: ProjectStatus
   href?: string
+  summary?: string
+  content: string
 }
 
 export const RECENT_WORK_LIMIT = 5
-
-export const PROJECTS: Project[] = [
-  {
-    slug: 'autonomi',
-    title: 'Autonomi',
-    startedAt: '2026-01-02',
-    status: 'active',
-    href: 'https://autonomi.run',
-  },
-  {
-    slug: 'lemma',
-    title: 'Lemma',
-    startedAt: '2025-11-10',
-    status: 'active',
-    href: 'https://lemma.irere.dev',
-  },
-  {
-    slug: 'aithings',
-    title: 'AI Things',
-    startedAt: '2025-11-14',
-    status: 'active',
-    href: 'https://aithings.dev',
-  },
-  {
-    slug: 'shipfree',
-    title: 'ShipFree',
-    startedAt: '2025-01-20',
-    status: 'active',
-    href: 'https://shipfre.revoks.dev',
-  },
-  {
-    slug: 'waitly',
-    title: 'Waitly',
-    startedAt: '2025-03-08',
-    status: 'active',
-    href: 'https://waitly.revoks.dev',
-  },
-  {
-    slug: 'clawnewz',
-    title: 'ClawNewz',
-    startedAt: '2026-02-15',
-    status: 'active',
-    href: 'https://clawnewz.com',
-  },
-  {
-    slug: 'postalon',
-    title: 'Postalon',
-    startedAt: '2025-07-15',
-    status: 'failed',
-    href: 'https://github.com/Irere123/postalon',
-  },
-  {
-    slug: 'codecrawl',
-    title: 'Codecrawl',
-    startedAt: '2025-07-15',
-    status: 'failed',
-    href: 'https://github.com/revokslab/codecrawl',
-  },
-  {
-    slug: 'mentor',
-    title: 'Mentor AI',
-    startedAt: '2025-02-01',
-    status: 'failed',
-    href: 'https://github.com/revokslab/mentor.ai',
-  },
-  {
-    slug: 'vsnip',
-    title: 'VSnip',
-    startedAt: '2024-03-20',
-    status: 'failed',
-    href: 'https://github.com/Irere123/vsnip',
-  },
-  {
-    slug: 'relaunch',
-    title: 'Relaunch',
-    startedAt: '2025-04-07',
-    status: 'failed',
-    href: 'https://github.com/Irere123/relaunch',
-  },
-  {
-    slug: 'reall',
-    title: 'Reall',
-    startedAt: '2023-11-1',
-    status: 'failed',
-    href: 'https://github.com/Irere123/reall',
-  },
-  {
-    slug: 'neox',
-    title: 'Neox',
-    startedAt: '2021-09-1',
-    status: 'failed',
-    href: 'https://github.com/Irere123/Neox-UI',
-  },
-]
 
 function sortByIsoDateDesc<T extends { [K in D]: string }, D extends string>(
   entries: T[],
@@ -120,8 +30,57 @@ function sortByIsoDateDesc<T extends { [K in D]: string }, D extends string>(
   return [...entries].sort((a, b) => b[dateKey].localeCompare(a[dateKey]))
 }
 
+function toArticle(article: (typeof allArticles)[number]): Article {
+  return {
+    slug: article.slug,
+    title: article.title,
+    publishedAt: article.publishedAt,
+    summary: article.summary,
+    content: article.content,
+    isNew: article.isNew,
+  }
+}
+
+function toProject(project: (typeof allProjects)[number]): Project {
+  return {
+    slug: project.slug,
+    title: project.title,
+    startedAt: project.startedAt,
+    status: project.status,
+    href: project.href,
+    summary: project.summary,
+    content: project.content,
+  }
+}
+
+export function getAllArticles() {
+  return sortByIsoDateDesc(allArticles.map(toArticle), 'publishedAt')
+}
+
+export function getRecentArticles(limit = RECENT_WORK_LIMIT) {
+  return getAllArticles().slice(0, limit)
+}
+
+export function getArticleBySlug(slug: string) {
+  return getAllArticles().find((article) => article.slug === slug) ?? null
+}
+
+export function getArticlesPage(cursor?: string | null, pageSize = 12) {
+  const articles = getAllArticles()
+  const startIndex = cursor ? articles.findIndex((article) => article.slug === cursor) + 1 : 0
+  const safeStartIndex = startIndex > 0 ? startIndex : 0
+  const data = articles.slice(safeStartIndex, safeStartIndex + pageSize)
+  const lastItem = data[data.length - 1]
+  const hasMore = safeStartIndex + data.length < articles.length
+
+  return {
+    data,
+    nextCursor: hasMore && lastItem ? lastItem.slug : null,
+  }
+}
+
 export function getAllProjects() {
-  return sortByIsoDateDesc(PROJECTS, 'startedAt')
+  return sortByIsoDateDesc(allProjects.map(toProject), 'startedAt')
 }
 
 export function getRecentProjects(limit = RECENT_WORK_LIMIT) {

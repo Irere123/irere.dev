@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'motion/react'
 
 import { Articles } from '@/components/work/articles'
 import { archiveArticlesInfiniteQueryOptions } from '@/lib/article-queries'
+import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 
 export const Route = createFileRoute('/articles/')({
   loader: async ({ context }) => {
@@ -18,6 +19,7 @@ function ArticlesArchivePage() {
   )
   const articles = data?.pages.flatMap((page) => page.data) ?? []
   const shouldReduceMotion = useReducedMotion()
+  const isPageAnimationReady = usePageAnimationReady()
   const offset = shouldReduceMotion ? 0 : 14
   const entranceTransition = shouldReduceMotion
     ? { duration: 0.14, ease: 'easeOut' as const }
@@ -26,13 +28,13 @@ function ArticlesArchivePage() {
   return (
     <motion.main
       className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:px-6 sm:py-12'
-      initial={{ opacity: 0, y: offset }}
+      initial={isPageAnimationReady ? { opacity: 0, y: offset } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={entranceTransition}
     >
       <motion.div
         className='flex flex-col gap-2'
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
+        initial={isPageAnimationReady ? { opacity: 0, y: shouldReduceMotion ? 0 : 6 } : false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...entranceTransition, delay: shouldReduceMotion ? 0 : 0.03 }}
       >
@@ -46,7 +48,7 @@ function ArticlesArchivePage() {
         <h1 className='text-xl font-semibold text-gray-900 sm:text-2xl'>Article archive</h1>
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+        initial={isPageAnimationReady ? { opacity: 0, y: shouldReduceMotion ? 0 : 8 } : false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...entranceTransition, delay: shouldReduceMotion ? 0 : 0.06 }}
       >
@@ -57,7 +59,7 @@ function ArticlesArchivePage() {
       ) : null}
       {hasNextPage ? (
         <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+          initial={isPageAnimationReady ? { opacity: 0, y: shouldReduceMotion ? 0 : 8 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...entranceTransition, delay: shouldReduceMotion ? 0 : 0.08 }}
         >

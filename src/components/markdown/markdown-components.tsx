@@ -63,7 +63,11 @@ export function createArticleMarkdownComponents({
     h3: ({ children, ...props }) => {
       const id = getHeadingId(getTextFromReactNode(children))
       return (
-        <h3 id={id} className='mt-6 scroll-mt-28 text-lg font-semibold text-gray-900 sm:text-xl' {...props}>
+        <h3
+          id={id}
+          className='mt-6 scroll-mt-28 text-lg font-semibold text-gray-900 sm:text-xl'
+          {...props}
+        >
           {children}
         </h3>
       )

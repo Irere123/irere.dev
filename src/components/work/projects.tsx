@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
 
+import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 import { getAllProjects, getRecentProjects, getYear } from '@/lib/work'
 
 interface ProjectsProps {
@@ -11,6 +12,7 @@ interface ProjectsProps {
 export function Projects({ mode = 'recent', showArchiveLink = true }: ProjectsProps) {
   const projects = mode === 'all' ? getAllProjects() : getRecentProjects()
   const shouldReduceMotion = useReducedMotion()
+  const isPageAnimationReady = usePageAnimationReady()
   let lastSeenYear = ''
 
   const listVariants = {
@@ -39,7 +41,7 @@ export function Projects({ mode = 'recent', showArchiveLink = true }: ProjectsPr
       <motion.ul
         className='border-b border-gray-200'
         variants={listVariants}
-        initial='hidden'
+        initial={isPageAnimationReady ? 'hidden' : false}
         animate='show'
       >
         {projects.map((project, i) => {
@@ -91,7 +93,7 @@ export function Projects({ mode = 'recent', showArchiveLink = true }: ProjectsPr
       {showArchiveLink ? (
         <motion.div
           className='text-right'
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+          initial={isPageAnimationReady ? { opacity: 0, y: shouldReduceMotion ? 0 : 8 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={
             shouldReduceMotion

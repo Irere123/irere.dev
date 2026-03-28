@@ -1,22 +1,14 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 
-import {
-  getPublishedArticleBySlug,
-  getPublishedArticlesPage,
-  getRecentPublishedArticles,
-} from '@/lib/lemma'
+import { getArticleBySlug, getArticlesPage, getRecentArticles } from '@/lib/work'
 
 export function archiveArticlesInfiniteQueryOptions() {
   return infiniteQueryOptions({
-    queryKey: ['articles', 'archive', 'infinite', 'default-page-size'],
+    queryKey: ['articles', 'archive', 'infinite', 'local-content'],
     initialPageParam: undefined as string | undefined,
     queryFn: async ({ pageParam }) => {
       try {
-        return await getPublishedArticlesPage({
-          data: {
-            cursor: pageParam,
-          },
-        })
+        return getArticlesPage(pageParam)
       } catch (error) {
         console.error('Failed to fetch archive articles page', {
           hasCursor: Boolean(pageParam),
@@ -37,7 +29,7 @@ export function recentArticlesQueryOptions() {
     queryKey: ['articles', 'recent', 'five'],
     queryFn: async () => {
       try {
-        return await getRecentPublishedArticles()
+        return getRecentArticles()
       } catch (error) {
         console.error('Failed to fetch recent published articles', { error })
         return []
@@ -54,7 +46,7 @@ export function articleBySlugQueryOptions(slug: string) {
     queryKey: ['articles', 'detail', slug],
     queryFn: async () => {
       try {
-        return await getPublishedArticleBySlug({ data: { slug } })
+        return getArticleBySlug(slug)
       } catch (error) {
         console.error('Failed to fetch article by slug', { slug, error })
         return null
