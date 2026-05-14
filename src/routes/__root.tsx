@@ -42,6 +42,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
   }),
+  errorComponent: RootError,
   notFoundComponent: RootNotFound,
   shellComponent: RootDocument,
 })
@@ -81,6 +82,25 @@ function RootNotFound() {
     <main className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-10 sm:px-6 sm:py-12'>
       <h1 className='text-2xl font-semibold text-gray-900'>Page not found</h1>
       <p className='text-sm text-gray-500'>The page you requested does not exist.</p>
+      <div>
+        <Link
+          to='/'
+          className='text-sm text-gray-700 underline underline-offset-4 hover:text-gray-900'
+        >
+          Back home
+        </Link>
+      </div>
+    </main>
+  )
+}
+
+function RootError() {
+  return (
+    <main className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-10 sm:px-6 sm:py-12'>
+      <h1 className='text-2xl font-semibold text-gray-900'>Something went wrong</h1>
+      <p className='text-sm text-gray-500'>
+        The site could not finish loading. Please refresh and try again.
+      </p>
       <div>
         <Link
           to='/'

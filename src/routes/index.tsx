@@ -4,6 +4,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { format } from 'date-fns'
 import { motion, useReducedMotion } from 'motion/react'
 import { createStandardSchemaV1, parseAsString, useQueryStates } from 'nuqs'
+import { useEffect, useState } from 'react'
 
 const searchParams = {
   work: parseAsString.withDefault('articles'),
@@ -18,26 +19,37 @@ import { env } from 'cloudflare:workers'
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context }) => {
-    const [deploymentDate] = await Promise.all([
-      getDeploymentDate(),
-      context.queryClient.ensureQueryData(recentArticlesQueryOptions()),
-    ])
-
-    return {
-      deploymentDate,
-    }
+    await context.queryClient.ensureQueryData(recentArticlesQueryOptions())
   },
+  pendingComponent: HomePending,
+  errorComponent: HomeError,
   validateSearch: createStandardSchemaV1(searchParams, {
     partialOutput: true,
   }),
 })
 
 const getDeploymentDate = createServerFn().handler(() => {
-  return new Date(env.CF_VERSION_METADATA.timestamp)
+  try {
+    const timestamp = env.CF_VERSION_METADATA?.timestamp
+
+    if (!timestamp) {
+      return null
+    }
+
+    const deploymentDate = new Date(timestamp)
+
+    if (Number.isNaN(deploymentDate.getTime())) {
+      return null
+    }
+
+    return deploymentDate
+  } catch (error) {
+    console.error('Failed to read Cloudflare version metadata', { error })
+    return null
+  }
 })
 
 function App() {
-  const { deploymentDate } = Route.useLoaderData()
   const { data: articles } = useSuspenseQuery(recentArticlesQueryOptions())
   const [{ work }] = useQueryStates(searchParams)
   const shouldReduceMotion = useReducedMotion()
@@ -84,9 +96,7 @@ function App() {
         <CollectionPreview />
         <div>
           <h1 className='font-bold sm:text-base text-xl'>Irere Emmanuel</h1>
-          <p className='text-sm text-gray-500'>
-            Last deployed on {format(deploymentDate, 'MMM d, yyyy')}
-          </p>
+          <DeploymentDate />
         </div>
       </motion.div>
       <motion.article
@@ -134,5 +144,81 @@ function App() {
         <Work work={work} articles={articles} />
       </motion.div>
     </motion.main>
+  )
+}
+
+function DeploymentDate() {
+  const [deploymentDate, setDeploymentDate] = useState<Date | null>(null)
+
+  useEffect(() => {
+    let isMounted = true
+
+    getDeploymentDate()
+      .then((date) => {
+        if (isMounted) {
+          setDeploymentDate(date)
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to load deployment date', { error })
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  if (!deploymentDate) {
+    return null
+  }
+
+  return (
+    <p className='text-sm text-gray-500' suppressHydrationWarning>
+      Last deployed on {format(deploymentDate, 'MMM d, yyyy')}
+    </p>
+  )
+}
+
+function HomePending() {
+  return (
+    <main className='mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-10 sm:px-6 sm:py-12'>
+      <div className='flex flex-col gap-3'>
+        <div className='hidden h-[72px] w-full sm:block' />
+        <div className='flex flex-col gap-2'>
+          <div className='h-5 w-36 rounded bg-gray-200' />
+          <div className='h-4 w-44 rounded bg-gray-200' />
+        </div>
+      </div>
+      <div className='flex flex-col gap-3 py-6 sm:py-8'>
+        <div className='h-4 w-full rounded bg-gray-200' />
+        <div className='h-4 w-5/6 rounded bg-gray-200' />
+        <div className='h-4 w-2/3 rounded bg-gray-200' />
+      </div>
+      <div className='flex flex-col gap-3'>
+        <div className='flex gap-2'>
+          <div className='h-10 w-28 rounded-full bg-gray-200' />
+          <div className='h-10 w-28 rounded-full bg-gray-200' />
+        </div>
+        <div className='h-16 rounded bg-gray-200' />
+      </div>
+    </main>
+  )
+}
+
+function HomeError() {
+  return (
+    <main className='mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-10 sm:px-6 sm:py-12'>
+      <h1 className='text-2xl font-semibold text-gray-900'>Could not load the homepage</h1>
+      <p className='text-sm text-gray-500'>
+        Something failed while loading this page. Please refresh and try again.
+      </p>
+      <button
+        type='button'
+        className='w-fit rounded-full bg-gray-900 px-4 py-2 text-sm text-white transition-colors hover:bg-gray-700'
+        onClick={() => window.location.reload()}
+      >
+        Refresh
+      </button>
+    </main>
   )
 }

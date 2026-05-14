@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { cloudflare } from '@cloudflare/vite-plugin'
 import contentCollections from '@content-collections/vite'
 import tailwindcss from '@tailwindcss/vite'
@@ -8,13 +9,24 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const config = defineConfig({
+  resolve: {
+    alias: {
+      '@tanstack/react-start/server-entry': fileURLToPath(
+        new URL('./src/server.ts', import.meta.url)
+      ),
+    },
+  },
   plugins: [
     contentCollections(),
     cloudflare({ viteEnvironment: { name: 'ssr' } }),
     devtools(),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      server: {
+        entry: 'server.ts',
+      },
+    }),
     viteReact(),
   ],
 })
