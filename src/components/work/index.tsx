@@ -39,7 +39,11 @@ export function Work({ work, articles }: { work: string; articles: Article[] }) 
           exit={{ opacity: 0, y: contentOffset * -0.5 }}
           transition={contentTransition}
         >
-          {activeWork === 'articles' ? <Articles articles={articles} /> : <Projects />}
+          {activeWork === 'articles' ? (
+            <Articles articles={articles} linkPreload='viewport' />
+          ) : (
+            <Projects />
+          )}
         </motion.div>
       </AnimatePresence>
     </div>

@@ -46,6 +46,14 @@ function ArticleDetailPage() {
           {format(new Date(article.publishedAt), 'MMMM d, yyyy')}
         </p>
       </header>
+      {article.bannerImage ? (
+        <img
+          src={article.bannerImage}
+          alt=''
+          className='w-full rounded-lg border border-gray-200 object-cover'
+          loading='eager'
+        />
+      ) : null}
       <div className='prose max-w-none'>
         <ArticleMarkdown markdown={article.content} />
       </div>

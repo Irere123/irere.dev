@@ -1,13 +1,16 @@
-import { allArticles, allProjects } from 'content-collections'
+import { allProjects } from 'content-collections'
 
 export type ProjectStatus = 'active' | 'failed'
 
+// Articles are served from the api.irere.dev content API (see lib/articles-api.ts).
+// This type is the shape the UI consumes, after mapping the API response.
 export interface Article {
   slug: string
   title: string
   publishedAt: string
   summary: string
   content: string
+  bannerImage?: string
   isNew?: boolean
 }
 
@@ -30,17 +33,6 @@ function sortByIsoDateDesc<T extends { [K in D]: string }, D extends string>(
   return [...entries].sort((a, b) => b[dateKey].localeCompare(a[dateKey]))
 }
 
-function toArticle(article: (typeof allArticles)[number]): Article {
-  return {
-    slug: article.slug,
-    title: article.title,
-    publishedAt: article.publishedAt,
-    summary: article.summary,
-    content: article.content,
-    isNew: article.isNew,
-  }
-}
-
 function toProject(project: (typeof allProjects)[number]): Project {
   return {
     slug: project.slug,
@@ -50,32 +42,6 @@ function toProject(project: (typeof allProjects)[number]): Project {
     href: project.href,
     summary: project.summary,
     content: project.content,
-  }
-}
-
-export function getAllArticles() {
-  return sortByIsoDateDesc(allArticles.map(toArticle), 'publishedAt')
-}
-
-export function getRecentArticles(limit = RECENT_WORK_LIMIT) {
-  return getAllArticles().slice(0, limit)
-}
-
-export function getArticleBySlug(slug: string) {
-  return getAllArticles().find((article) => article.slug === slug) ?? null
-}
-
-export function getArticlesPage(cursor?: string | null, pageSize = 12) {
-  const articles = getAllArticles()
-  const startIndex = cursor ? articles.findIndex((article) => article.slug === cursor) + 1 : 0
-  const safeStartIndex = startIndex > 0 ? startIndex : 0
-  const data = articles.slice(safeStartIndex, safeStartIndex + pageSize)
-  const lastItem = data[data.length - 1]
-  const hasMore = safeStartIndex + data.length < articles.length
-
-  return {
-    data,
-    nextCursor: hasMore && lastItem ? lastItem.slug : null,
   }
 }
 

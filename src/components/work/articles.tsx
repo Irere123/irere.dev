@@ -8,9 +8,16 @@ import { RoughUnderline } from '@/svg/rough-underline'
 interface ArticlesProps {
   showArchiveLink?: boolean
   articles: Article[]
+  // 'viewport' prefetches each article as its row scrolls into view (instant on tap, no
+  // hover needed — used on the short homepage list). 'intent' prefetches on hover.
+  linkPreload?: 'intent' | 'viewport'
 }
 
-export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
+export function Articles({
+  showArchiveLink = true,
+  articles,
+  linkPreload = 'intent',
+}: ArticlesProps) {
   const shouldReduceMotion = useReducedMotion()
   const isPageAnimationReady = usePageAnimationReady()
   let lastSeenYear = ''
@@ -69,7 +76,7 @@ export function Articles({ showArchiveLink = true, articles }: ArticlesProps) {
                   <Link
                     to='/articles/$slug'
                     params={{ slug: article.slug }}
-                    preload='intent'
+                    preload={linkPreload}
                     className='wrap-break-word text-gray-900 transition-colors hover:text-gray-600'
                   >
                     {article.title}

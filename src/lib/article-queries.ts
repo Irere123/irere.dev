@@ -1,14 +1,14 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 
-import { getArticleBySlug, getArticlesPage, getRecentArticles } from '@/lib/work'
+import { fetchArticleBySlug, fetchArticlesPage, fetchRecentArticles } from '@/lib/articles-api'
 
 export function archiveArticlesInfiniteQueryOptions() {
   return infiniteQueryOptions({
-    queryKey: ['articles', 'archive', 'infinite', 'local-content'],
+    queryKey: ['articles', 'archive', 'infinite'],
     initialPageParam: undefined as string | undefined,
     queryFn: async ({ pageParam }) => {
       try {
-        return getArticlesPage(pageParam)
+        return await fetchArticlesPage({ data: pageParam })
       } catch (error) {
         console.error('Failed to fetch archive articles page', {
           hasCursor: Boolean(pageParam),
@@ -29,7 +29,7 @@ export function recentArticlesQueryOptions() {
     queryKey: ['articles', 'recent', 'five'],
     queryFn: async () => {
       try {
-        return getRecentArticles()
+        return await fetchRecentArticles()
       } catch (error) {
         console.error('Failed to fetch recent published articles', { error })
         return []
@@ -46,7 +46,7 @@ export function articleBySlugQueryOptions(slug: string) {
     queryKey: ['articles', 'detail', slug],
     queryFn: async () => {
       try {
-        return getArticleBySlug(slug)
+        return await fetchArticleBySlug({ data: slug })
       } catch (error) {
         console.error('Failed to fetch article by slug', { slug, error })
         return null

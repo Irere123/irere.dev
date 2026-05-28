@@ -109,7 +109,9 @@ function App() {
         <motion.p variants={copyVariants}>
           I'm a software engineer with a{' '}
           <span className='font-serif font-medium'>design centric approach</span>. I love to build
-          products. Currently working on consumer mobile apps
+          products. Currently working on <a href='https://daisy.now' className='underline underline-offset-4'>
+            Daisy
+          </a>, an AI agent that can design mobile apps.
         </motion.p>
         <motion.p variants={copyVariants}>
           I’m also a co-founder at{' '}
@@ -121,12 +123,12 @@ function App() {
         <motion.p variants={copyVariants}>
           You can reach me at{' '}
           <a
-            href='https://x.com/codesdoes'
+            href='https://x.com/ireredotdev'
             target='_blank'
             className='underline underline-offset-4'
             rel='noopener'
           >
-            @codesdoes
+            @ireredotdev
           </a>{' '}
           or{' '}
           <a
@@ -148,6 +150,7 @@ function App() {
 }
 
 function DeploymentDate() {
+  const [status, setStatus] = useState<'loading' | 'loaded'>('loading')
   const [deploymentDate, setDeploymentDate] = useState<Date | null>(null)
 
   useEffect(() => {
@@ -157,16 +160,30 @@ function DeploymentDate() {
       .then((date) => {
         if (isMounted) {
           setDeploymentDate(date)
+          setStatus('loaded')
         }
       })
       .catch((error) => {
         console.error('Failed to load deployment date', { error })
+        if (isMounted) {
+          setStatus('loaded')
+        }
       })
 
     return () => {
       isMounted = false
     }
   }, [])
+
+  // Render a skeleton that occupies the exact line height of the resolved text (text-sm =>
+  // 20px / h-5), so the date popping in never pushes the content below it down.
+  if (status === 'loading') {
+    return (
+      <div className='flex h-5 items-center' aria-hidden='true'>
+        <span className='block h-3.5 w-44 animate-pulse rounded bg-gray-200' />
+      </div>
+    )
+  }
 
   if (!deploymentDate) {
     return null
