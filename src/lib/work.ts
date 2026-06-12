@@ -65,3 +65,8 @@ export function getYear(isoDate: string) {
 export function isoDateToDate(isoDate: string) {
   return new Date(`${isoDate}T00:00:00`)
 }
+
+export function getReadingTimeMinutes(content: string) {
+  const words = content.trim().split(/\s+/).filter(Boolean).length
+  return Math.max(1, Math.round(words / 220))
+}
