@@ -1,23 +1,37 @@
 import { useEffect, useState } from 'react'
 
+// Constructing an Intl.DateTimeFormat is expensive (locale data lookup) — build it once,
+// not on every tick.
+const kigaliTimeFormatter = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Africa/Kigali',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+})
+
 function KigaliTime() {
   const [time, setTime] = useState<string | null>(null)
 
+  // The display only shows HH:mm, so tick once per minute, aligned to the minute boundary,
+  // instead of re-rendering every second.
   useEffect(() => {
-    const format = () => {
-      setTime(
-        new Intl.DateTimeFormat('en-GB', {
-          timeZone: 'Africa/Kigali',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false,
-        }).format(new Date())
-      )
-    }
+    let interval: number | undefined
 
-    format()
-    const interval = setInterval(format, 1000)
-    return () => clearInterval(interval)
+    const update = () => setTime(kigaliTimeFormatter.format(new Date()))
+
+    update()
+    const timeout = window.setTimeout(
+      () => {
+        update()
+        interval = window.setInterval(update, 60_000)
+      },
+      60_000 - (Date.now() % 60_000)
+    )
+
+    return () => {
+      window.clearTimeout(timeout)
+      window.clearInterval(interval)
+    }
   }, [])
 
   if (time === null) return null

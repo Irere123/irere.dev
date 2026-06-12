@@ -21,12 +21,16 @@ export const CollectionImage = ({
   isExpanded = false,
 }: CollectionImageProps) => {
   const ref = useRef<HTMLDivElement>(null)
+  const boundsRef = useRef<{ x: number; width: number } | null>(null)
 
-  // Calculate distance from mouse to the center of this image
+  // Calculate distance from mouse to the center of this image. The items never reflow
+  // (only transforms animate), so measure offsetLeft/offsetWidth once instead of forcing
+  // layout reads on every animation frame.
   const distance = useTransform(() => {
-    const bounds = ref.current
-      ? { x: ref.current.offsetLeft, width: ref.current.offsetWidth }
-      : { x: 0, width: 0 }
+    if (!boundsRef.current && ref.current) {
+      boundsRef.current = { x: ref.current.offsetLeft, width: ref.current.offsetWidth }
+    }
+    const bounds = boundsRef.current ?? { x: 0, width: 0 }
     return (mouseLeft?.get() ?? 0) - bounds.x - bounds.width / 2
   })
 
@@ -67,6 +71,7 @@ export const CollectionImage = ({
       <img
         src={src}
         alt={alt}
+        decoding='async'
         width={200}
         height={200}
         className='h-full w-full shrink-0 cursor-pointer rounded-xl object-cover object-center'

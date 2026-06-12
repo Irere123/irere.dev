@@ -1,10 +1,9 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { format } from 'date-fns'
 import { motion, useReducedMotion } from 'motion/react'
 import { createStandardSchemaV1, parseAsString, useQueryStates } from 'nuqs'
-import { useEffect, useState } from 'react'
 
 const searchParams = {
   work: parseAsString.withDefault('articles'),
@@ -19,7 +18,10 @@ import { env } from 'cloudflare:workers'
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(recentArticlesQueryOptions())
+    await Promise.all([
+      context.queryClient.ensureQueryData(recentArticlesQueryOptions()),
+      context.queryClient.ensureQueryData(deploymentDateQueryOptions),
+    ])
   },
   pendingComponent: HomePending,
   errorComponent: HomeError,
@@ -47,6 +49,25 @@ const getDeploymentDate = createServerFn().handler(() => {
     console.error('Failed to read Cloudflare version metadata', { error })
     return null
   }
+})
+
+// Resolved in the route loader so the date is server-rendered with the page — fetching it
+// client-side after hydration re-rendered the hero mid-entrance-animation. Stored as an
+// ISO string so it dehydrates cleanly, and never refetched (a deployment date can't change
+// without a full reload).
+const deploymentDateQueryOptions = queryOptions({
+  queryKey: ['deployment-date'],
+  queryFn: async () => {
+    try {
+      const date = await getDeploymentDate()
+      return date ? date.toISOString() : null
+    } catch (error) {
+      console.error('Failed to load deployment date', { error })
+      return null
+    }
+  },
+  staleTime: Number.POSITIVE_INFINITY,
+  gcTime: 30 * 60_000,
 })
 
 function App() {
@@ -152,48 +173,15 @@ function App() {
 }
 
 function DeploymentDate() {
-  const [status, setStatus] = useState<'loading' | 'loaded'>('loading')
-  const [deploymentDate, setDeploymentDate] = useState<Date | null>(null)
+  const { data: deployedAtIso } = useSuspenseQuery(deploymentDateQueryOptions)
 
-  useEffect(() => {
-    let isMounted = true
-
-    getDeploymentDate()
-      .then((date) => {
-        if (isMounted) {
-          setDeploymentDate(date)
-          setStatus('loaded')
-        }
-      })
-      .catch((error) => {
-        console.error('Failed to load deployment date', { error })
-        if (isMounted) {
-          setStatus('loaded')
-        }
-      })
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
-
-  // Render a skeleton that occupies the exact line height of the resolved text (text-sm =>
-  // 20px / h-5), so the date popping in never pushes the content below it down.
-  if (status === 'loading') {
-    return (
-      <div className='flex h-5 items-center' aria-hidden='true'>
-        <span className='block h-3.5 w-44 animate-pulse rounded bg-gray-200' />
-      </div>
-    )
-  }
-
-  if (!deploymentDate) {
+  if (!deployedAtIso) {
     return null
   }
 
   return (
     <p className='text-sm text-gray-500' suppressHydrationWarning>
-      Last deployed on {format(deploymentDate, 'MMM d, yyyy')}
+      Last deployed on {format(new Date(deployedAtIso), 'MMM d, yyyy')}
     </p>
   )
 }

@@ -48,6 +48,7 @@ export const ExpandedState = ({ projects, profileImageSrc, setIsExpanded }: Expa
           <img
             src={profileImageSrc}
             alt='Irere Emmanuel profile picture'
+            decoding='async'
             width={200}
             height={200}
             className='size-full object-cover object-center'
