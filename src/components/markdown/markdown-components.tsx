@@ -72,10 +72,23 @@ export function createArticleMarkdownComponents({
         </h3>
       )
     },
-    p: (props) => <p className='leading-7 text-gray-800' {...props} />,
+    h4: ({ children, ...props }) => (
+      <h4 className='mt-6 text-base font-semibold text-gray-900 sm:text-lg' {...props}>
+        {children}
+      </h4>
+    ),
+    p: (props) => <p className='leading-7 break-words text-gray-800' {...props} />,
     ul: (props) => <ul className='my-5 list-disc pl-6 text-gray-800' {...props} />,
     ol: (props) => <ol className='my-5 list-decimal pl-6 text-gray-800' {...props} />,
-    li: (props) => <li className='my-1.5' {...props} />,
+    li: (props) => <li className='my-1.5 break-words' {...props} />,
+    img: ({ alt, ...props }) => (
+      <img
+        alt={alt ?? ''}
+        loading='lazy'
+        className='my-6 w-full rounded-lg border border-gray-200 object-cover'
+        {...props}
+      />
+    ),
     blockquote: (props) => (
       <blockquote
         className='my-6 border-l-4 border-gray-300 pl-4 text-base text-gray-700 italic'
