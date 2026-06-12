@@ -1,18 +1,18 @@
+import { Link } from '@tanstack/react-router'
+import { ArrowLeft } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useState } from 'react'
 
+import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 import type { TocItem } from './toc-utils'
 
 interface ArticleTableOfContentsProps {
   items: TocItem[]
 }
 
-function getLineWidth(level: TocItem['level']) {
-  return level === 2 ? 16 : 11
-}
-
 export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
   const shouldReduceMotion = useReducedMotion()
+  const isPageAnimationReady = usePageAnimationReady()
   const [activeId, setActiveId] = useState(items[0]?.id ?? '')
 
   const scrollToHeading = useCallback(
@@ -86,62 +86,77 @@ export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
     }
   }, [items])
 
-  if (items.length === 0) {
-    return null
-  }
+  const entranceTransition = shouldReduceMotion
+    ? { duration: 0.14, ease: 'easeOut' as const }
+    : { type: 'spring' as const, stiffness: 280, damping: 30, mass: 0.65 }
 
   return (
-    <aside className='fixed left-8 top-1/2 z-20 hidden -translate-y-1/2 xl:flex'>
-      <motion.nav
-        aria-label='Table of contents'
-        className='px-1 py-1'
-        initial={{ opacity: 0, x: shouldReduceMotion ? 0 : -14 }}
+    <aside className='fixed left-8 top-12 z-20 hidden w-56 xl:block'>
+      <motion.div
+        initial={isPageAnimationReady ? { opacity: 0, x: shouldReduceMotion ? 0 : -10 } : false}
         animate={{ opacity: 1, x: 0 }}
-        transition={
-          shouldReduceMotion
-            ? { duration: 0.15, ease: 'easeOut' as const }
-            : { type: 'spring' as const, stiffness: 290, damping: 30, mass: 0.65 }
-        }
+        transition={entranceTransition}
       >
-        <ul className='flex flex-col gap-4'>
-          {items.map((item, index) => {
-            const isActive = item.id === activeId
-            const lineWidth = getLineWidth(item.level)
-            const sectionNumber = String(index + 1).padStart(2, '0')
+        <Link
+          to='/articles'
+          className='group inline-flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-gray-900'
+        >
+          <ArrowLeft
+            aria-hidden
+            className='size-4 transition-transform duration-200 group-hover:-translate-x-0.5'
+          />
+          Back
+        </Link>
+      </motion.div>
+      {items.length > 0 ? (
+        <nav
+          aria-label='Table of contents'
+          className='mt-12 max-h-[calc(100vh-14rem)] overflow-y-auto'
+        >
+          <ul className='flex flex-col gap-2.5'>
+            {items.map((item, index) => {
+              const isActive = item.id === activeId
 
-            return (
-              <li key={item.id} className='relative'>
-                <button
-                  type='button'
-                  aria-label={`Go to ${item.title}`}
-                  onClick={() => scrollToHeading(item.id)}
-                  className='group flex h-4 items-center'
+              return (
+                <motion.li
+                  key={item.id}
+                  initial={
+                    isPageAnimationReady ? { opacity: 0, x: shouldReduceMotion ? 0 : -8 } : false
+                  }
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    ...entranceTransition,
+                    delay: shouldReduceMotion ? 0 : 0.05 + index * 0.035,
+                  }}
                 >
-                  <motion.span
-                    className={`block h-0.5 rounded-full transition-colors ${
-                      isActive ? 'bg-gray-900' : 'bg-gray-500 group-hover:bg-gray-700'
-                    }`}
-                    initial={false}
-                    animate={
-                      isActive
-                        ? { width: lineWidth + 34, opacity: 1 }
-                        : { width: lineWidth, opacity: 0.72 }
-                    }
-                    transition={
-                      shouldReduceMotion
-                        ? { duration: 0.12, ease: 'easeOut' as const }
-                        : { type: 'spring' as const, stiffness: 340, damping: 28, mass: 0.45 }
-                    }
-                  />
-                  <span className='pointer-events-none absolute left-full top-1/2 ml-3 -translate-y-1/2 whitespace-nowrap text-xs font-medium text-gray-600 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100'>
-                    {sectionNumber}
-                  </span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      </motion.nav>
+                  <button
+                    type='button'
+                    onClick={() => scrollToHeading(item.id)}
+                    className={`relative flex w-full items-center text-left text-sm leading-6 transition-colors duration-200 ${
+                      item.level === 3 ? 'pl-8' : 'pl-4'
+                    } ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-800'}`}
+                  >
+                    {isActive ? (
+                      <motion.span
+                        layoutId='toc-active-dot'
+                        className={`absolute top-1/2 -mt-[2.5px] size-[5px] rounded-full bg-emerald-500 ${
+                          item.level === 3 ? 'left-4' : 'left-0'
+                        }`}
+                        transition={
+                          shouldReduceMotion
+                            ? { duration: 0 }
+                            : { type: 'spring' as const, stiffness: 380, damping: 32, mass: 0.5 }
+                        }
+                      />
+                    ) : null}
+                    <span className='truncate'>{item.title}</span>
+                  </button>
+                </motion.li>
+              )
+            })}
+          </ul>
+        </nav>
+      ) : null}
     </aside>
   )
 }

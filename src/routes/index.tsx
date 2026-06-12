@@ -109,9 +109,11 @@ function App() {
         <motion.p variants={copyVariants}>
           I'm a software engineer with a{' '}
           <span className='font-serif font-medium'>design centric approach</span>. I love to build
-          products. Currently working on <a href='https://daisy.now' className='underline underline-offset-4'>
+          products. Currently working on{' '}
+          <a href='https://daisy.now' className='underline underline-offset-4'>
             Daisy
-          </a>, an AI agent that can design mobile apps.
+          </a>
+          , an AI agent that can design mobile apps.
         </motion.p>
         <motion.p variants={copyVariants}>
           I’m also a co-founder at{' '}
