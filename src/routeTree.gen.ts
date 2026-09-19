@@ -10,13 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SocialIndexRouteImport } from './routes/social/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as ArticlesIndexRouteImport } from './routes/articles/index'
+import { Route as SocialTermsRouteImport } from './routes/social/terms'
+import { Route as SocialPrivacyRouteImport } from './routes/social/privacy'
 import { Route as ArticlesSlugRouteImport } from './routes/articles/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SocialIndexRoute = SocialIndexRouteImport.update({
+  id: '/social/',
+  path: '/social/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
@@ -29,6 +37,16 @@ const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
   path: '/articles/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SocialTermsRoute = SocialTermsRouteImport.update({
+  id: '/social/terms',
+  path: '/social/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SocialPrivacyRoute = SocialPrivacyRouteImport.update({
+  id: '/social/privacy',
+  path: '/social/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
   id: '/articles/$slug',
   path: '/articles/$slug',
@@ -38,35 +56,69 @@ const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/social/privacy': typeof SocialPrivacyRoute
+  '/social/terms': typeof SocialTermsRoute
   '/articles/': typeof ArticlesIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/social/': typeof SocialIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/social/privacy': typeof SocialPrivacyRoute
+  '/social/terms': typeof SocialTermsRoute
   '/articles': typeof ArticlesIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/social': typeof SocialIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/social/privacy': typeof SocialPrivacyRoute
+  '/social/terms': typeof SocialTermsRoute
   '/articles/': typeof ArticlesIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/social/': typeof SocialIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/articles/$slug' | '/articles/' | '/projects/'
+  fullPaths:
+    | '/'
+    | '/articles/$slug'
+    | '/social/privacy'
+    | '/social/terms'
+    | '/articles/'
+    | '/projects/'
+    | '/social/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/articles/$slug' | '/articles' | '/projects'
-  id: '__root__' | '/' | '/articles/$slug' | '/articles/' | '/projects/'
+  to:
+    | '/'
+    | '/articles/$slug'
+    | '/social/privacy'
+    | '/social/terms'
+    | '/articles'
+    | '/projects'
+    | '/social'
+  id:
+    | '__root__'
+    | '/'
+    | '/articles/$slug'
+    | '/social/privacy'
+    | '/social/terms'
+    | '/articles/'
+    | '/projects/'
+    | '/social/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
+  SocialPrivacyRoute: typeof SocialPrivacyRoute
+  SocialTermsRoute: typeof SocialTermsRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  SocialIndexRoute: typeof SocialIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -76,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/social/': {
+      id: '/social/'
+      path: '/social'
+      fullPath: '/social/'
+      preLoaderRoute: typeof SocialIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/': {
@@ -92,6 +151,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArticlesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/social/terms': {
+      id: '/social/terms'
+      path: '/social/terms'
+      fullPath: '/social/terms'
+      preLoaderRoute: typeof SocialTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/social/privacy': {
+      id: '/social/privacy'
+      path: '/social/privacy'
+      fullPath: '/social/privacy'
+      preLoaderRoute: typeof SocialPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/articles/$slug': {
       id: '/articles/$slug'
       path: '/articles/$slug'
@@ -105,8 +178,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
+  SocialPrivacyRoute: SocialPrivacyRoute,
+  SocialTermsRoute: SocialTermsRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  SocialIndexRoute: SocialIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
