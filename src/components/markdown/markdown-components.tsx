@@ -31,7 +31,7 @@ function MarkdownLink({ href, children, ...props }: AnchorProps) {
       href={href}
       target={isExternal ? '_blank' : undefined}
       rel={isExternal ? 'noopener noreferrer' : undefined}
-      className='font-medium text-gray-900 underline underline-offset-4 hover:text-gray-500'
+      className='text-gray-500 underline decoration-gray-300 underline-offset-[0.15em] transition-colors hover:text-gray-900 hover:decoration-gray-500'
       {...props}
     >
       {children}
@@ -44,7 +44,10 @@ export function createArticleMarkdownComponents({
 }: ArticleMarkdownComponentOptions): Components {
   return {
     h1: ({ children, ...props }) => (
-      <h1 className='mt-8 text-2xl font-semibold text-gray-900 sm:text-3xl' {...props}>
+      <h1
+        className='mt-12 mb-5 text-2xl/[1.4] font-semibold text-balance text-gray-900 first:mt-0'
+        {...props}
+      >
         {children}
       </h1>
     ),
@@ -53,7 +56,7 @@ export function createArticleMarkdownComponents({
       return (
         <h2
           id={id}
-          className='mt-8 scroll-mt-28 text-xl font-semibold text-gray-900 sm:text-2xl'
+          className='mt-12 mb-5 scroll-mt-28 text-2xl/[1.4] font-semibold text-balance text-gray-900 first:mt-0'
           {...props}
         >
           {children}
@@ -65,7 +68,7 @@ export function createArticleMarkdownComponents({
       return (
         <h3
           id={id}
-          className='mt-6 scroll-mt-28 text-lg font-semibold text-gray-900 sm:text-xl'
+          className='mt-10 mb-4 scroll-mt-28 text-xl/[1.4] font-semibold text-balance text-gray-900 first:mt-0'
           {...props}
         >
           {children}
@@ -73,14 +76,14 @@ export function createArticleMarkdownComponents({
       )
     },
     h4: ({ children, ...props }) => (
-      <h4 className='mt-6 text-base font-semibold text-gray-900 sm:text-lg' {...props}>
+      <h4 className='mt-8 mb-3 font-semibold text-gray-900 first:mt-0' {...props}>
         {children}
       </h4>
     ),
-    p: (props) => <p className='leading-7 break-words text-gray-800' {...props} />,
-    ul: (props) => <ul className='my-5 list-disc pl-6 text-gray-800' {...props} />,
-    ol: (props) => <ol className='my-5 list-decimal pl-6 text-gray-800' {...props} />,
-    li: (props) => <li className='my-1.5 break-words' {...props} />,
+    p: (props) => <p className='mb-6 break-words text-pretty' {...props} />,
+    ul: (props) => <ul className='mb-6 list-disc pl-8' {...props} />,
+    ol: (props) => <ol className='mb-6 list-decimal pl-8' {...props} />,
+    li: (props) => <li className='mb-1 break-words [&>p]:mb-0' {...props} />,
     img: ({ alt, ...props }) => (
       <img
         alt={alt ?? ''}
@@ -91,15 +94,15 @@ export function createArticleMarkdownComponents({
     ),
     blockquote: (props) => (
       <blockquote
-        className='my-6 border-l-2 border-gray-300 pl-4 text-base text-gray-700'
+        className='mb-6 border-l-2 border-gray-300 pl-5 text-gray-600 [&>:last-child]:mb-0'
         {...props}
       />
     ),
-    hr: (props) => <hr className='my-8 border-gray-200' {...props} />,
+    hr: (props) => <hr className='my-10 border-gray-200' {...props} />,
     a: MarkdownLink,
     pre: (props) => (
       <pre
-        className='my-6 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100'
+        className='mb-6 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100 [&_code]:text-inherit'
         {...props}
       />
     ),
@@ -107,7 +110,7 @@ export function createArticleMarkdownComponents({
       const isCodeBlock = Boolean(className)
       const codeClassName = isCodeBlock
         ? `font-mono text-sm ${className}`
-        : 'rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[0.9em] text-gray-900'
+        : 'font-mono text-[0.9em] text-gray-900'
 
       return <code className={codeClassName} {...props} />
     },

@@ -9,6 +9,7 @@ import { ArticleBody, getArticleTableOfContents } from '@/components/markdown/ar
 import { ArticleTableOfContents } from '@/components/markdown/article-table-of-contents'
 import { ShareButton } from '@/components/share-button'
 import { articleBySlugQueryOptions } from '@/lib/article-queries'
+import { PROFILE_PREVIEW_IMAGE } from '@/lib/constants'
 import { useBackNavigation } from '@/lib/use-back-navigation'
 import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 
@@ -74,13 +75,26 @@ function ArticleDetailPage() {
             Back
           </Link>
         </motion.div>
-        <motion.header {...reveal(0.05)} className='flex flex-col gap-2'>
+        <motion.header {...reveal(0.05)} className='flex flex-col gap-3 pb-4'>
           <div className='flex items-start justify-between gap-4'>
-            <h1 className='text-2xl font-semibold text-gray-900 sm:text-3xl'>{article.title}</h1>
+            <h1 className='font-serif text-3xl/[1.1] font-semibold text-balance text-gray-900'>
+              {article.title}
+            </h1>
             <ShareButton title={article.title} />
           </div>
-          <p className='text-sm text-gray-500'>
-            {format(new Date(article.publishedAt), 'MMMM d, yyyy')}
+          <p className='flex items-center gap-2 text-[13px] text-gray-500'>
+            <img
+              src={PROFILE_PREVIEW_IMAGE}
+              alt=''
+              width={20}
+              height={20}
+              className='size-5 rounded-full object-cover grayscale'
+            />
+            <time dateTime={article.publishedAt}>
+              {format(new Date(article.publishedAt), 'MMMM d, yyyy')}
+            </time>
+            <span aria-hidden>·</span>
+            Irere Emmanuel
           </p>
         </motion.header>
         {article.bannerImage ? (
@@ -92,7 +106,7 @@ function ArticleDetailPage() {
             loading='eager'
           />
         ) : null}
-        <motion.div {...reveal(0.09)} className='article-prose prose max-w-none'>
+        <motion.div {...reveal(0.09)} className='font-serif text-[17px]/[1.6] text-gray-800'>
           <ArticleBody article={article} />
         </motion.div>
       </motion.article>

@@ -2,8 +2,44 @@
 @import "@bprogress/core/css";
 @plugin "@tailwindcss/typography";
 
+/* The reading face for article text. local() only: Apple devices ship Iowan Old Style, so
+   nothing is downloaded; elsewhere the stack falls back to Palatino, then Georgia. */
+@font-face {
+  font-family: "Iowan Old Style Local";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Iowan Old Style"), local("IowanOldStyle-Roman");
+}
+
+@font-face {
+  font-family: "Iowan Old Style Local";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Iowan Old Style Italic"), local("IowanOldStyle-Italic");
+}
+
+@font-face {
+  font-family: "Iowan Old Style Local";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Iowan Old Style Bold"), local("IowanOldStyle-Bold");
+}
+
+@font-face {
+  font-family: "Iowan Old Style Local";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Iowan Old Style Bold Italic"), local("IowanOldStyle-BoldItalic");
+}
+
 @theme {
   --font-sans: "Inter", sans-serif, system-ui;
+  --font-serif:
+    "Iowan Old Style Local", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --font-mono: "Geist Mono", monospace, system-ui;
 
   --primary: lightgreen;
@@ -25,37 +61,4 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-/* Article bodies: `prose` plus the components in markdown-components.tsx. */
-.article-prose blockquote {
-  font-style: normal;
-  font-weight: 400;
-}
-
-/* Quotes in the content already carry their own quotation marks. */
-.article-prose blockquote p::before,
-.article-prose blockquote p::after {
-  content: none;
-}
-
-/* The editor wraps every list item in a paragraph; keep lists tight. */
-.article-prose li > p {
-  margin-block: 0;
-}
-
-.article-prose code {
-  font-weight: 500;
-}
-
-.article-prose code::before,
-.article-prose code::after {
-  content: none;
-}
-
-/* Code blocks without a language hint render through the inline-code styles. */
-.article-prose pre code {
-  background-color: transparent;
-  padding: 0;
-  color: inherit;
 }
