@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useState } from 'react'
 
+import { useBackNavigation } from '@/lib/use-back-navigation'
 import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 import type { TocItem } from './toc-utils'
 
@@ -13,6 +14,7 @@ interface ArticleTableOfContentsProps {
 export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
   const shouldReduceMotion = useReducedMotion()
   const isPageAnimationReady = usePageAnimationReady()
+  const goBack = useBackNavigation()
   const [activeId, setActiveId] = useState(items[0]?.id ?? '')
 
   const scrollToHeading = useCallback(
@@ -99,6 +101,7 @@ export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
       >
         <Link
           to='/articles'
+          onClick={goBack}
           className='group inline-flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-gray-900'
         >
           <ArrowLeft
@@ -108,7 +111,8 @@ export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
           Back
         </Link>
       </motion.div>
-      {items.length > 0 ? (
+      {/* A single heading isn't worth navigating. */}
+      {items.length > 1 ? (
         <nav
           aria-label='Table of contents'
           className='mt-12 max-h-[calc(100vh-14rem)] overflow-y-auto'
@@ -132,23 +136,10 @@ export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
                   <button
                     type='button'
                     onClick={() => scrollToHeading(item.id)}
-                    className={`relative flex w-full items-center text-left text-sm leading-6 transition-colors duration-200 ${
-                      item.level === 3 ? 'pl-8' : 'pl-4'
-                    } ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-800'}`}
+                    className={`flex w-full items-center text-left text-sm leading-6 transition-colors duration-200 ${
+                      item.level === 3 ? 'pl-4' : ''
+                    } ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
                   >
-                    {isActive ? (
-                      <motion.span
-                        layoutId='toc-active-dot'
-                        className={`absolute top-1/2 -mt-[2.5px] size-[5px] rounded-full bg-emerald-500 ${
-                          item.level === 3 ? 'left-4' : 'left-0'
-                        }`}
-                        transition={
-                          shouldReduceMotion
-                            ? { duration: 0 }
-                            : { type: 'spring' as const, stiffness: 380, damping: 32, mass: 0.5 }
-                        }
-                      />
-                    ) : null}
                     <span className='truncate'>{item.title}</span>
                   </button>
                 </motion.li>

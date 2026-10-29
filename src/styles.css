@@ -4,7 +4,6 @@
 
 @theme {
   --font-sans: "Inter", sans-serif, system-ui;
-  --font-serif: "Libre Baskerville", serif, system-ui;
   --font-mono: "Geist Mono", monospace, system-ui;
 
   --primary: lightgreen;
@@ -28,8 +27,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-@keyframes rough-notation-dash {
-  to {
-    stroke-dashoffset: 0;
-  }
+/* Article bodies: `prose` plus the components in markdown-components.tsx. */
+.article-prose blockquote {
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* Quotes in the content already carry their own quotation marks. */
+.article-prose blockquote p::before,
+.article-prose blockquote p::after {
+  content: none;
+}
+
+/* The editor wraps every list item in a paragraph; keep lists tight. */
+.article-prose li > p {
+  margin-block: 0;
+}
+
+.article-prose code {
+  font-weight: 500;
+}
+
+.article-prose code::before,
+.article-prose code::after {
+  content: none;
+}
+
+/* Code blocks without a language hint render through the inline-code styles. */
+.article-prose pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
 }

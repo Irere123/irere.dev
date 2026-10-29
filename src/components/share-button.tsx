@@ -40,7 +40,7 @@ export function ShareButton({ title }: ShareButtonProps) {
       onClick={handleShare}
       aria-label={copied ? 'Link copied' : 'Share article'}
       whileTap={{ scale: 0.92 }}
-      className='relative flex size-9 shrink-0 items-center justify-center rounded-full border border-gray-200/80 bg-white text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors hover:bg-gray-50'
+      className='relative flex size-9 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-white hover:text-gray-900'
     >
       <AnimatePresence initial={false}>
         <motion.span
@@ -52,7 +52,7 @@ export function ShareButton({ title }: ShareButtonProps) {
           transition={{ duration: 0.16, ease: 'easeOut' }}
         >
           {copied ? (
-            <Check aria-hidden className='size-4 text-emerald-600' strokeWidth={2.5} />
+            <Check aria-hidden className='size-4' strokeWidth={2.5} />
           ) : (
             <Link aria-hidden className='size-4' strokeWidth={2} />
           )}

@@ -5,11 +5,11 @@ import { ArrowLeft } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useMemo } from 'react'
 
-import { ArticleMarkdown } from '@/components/markdown/article-markdown'
+import { ArticleBody, getArticleTableOfContents } from '@/components/markdown/article-body'
 import { ArticleTableOfContents } from '@/components/markdown/article-table-of-contents'
-import { extractTableOfContents } from '@/components/markdown/toc-utils'
 import { ShareButton } from '@/components/share-button'
 import { articleBySlugQueryOptions } from '@/lib/article-queries'
+import { useBackNavigation } from '@/lib/use-back-navigation'
 import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
 
 export const Route = createFileRoute('/articles/$slug')({
@@ -23,11 +23,12 @@ function ArticleDetailPage() {
   const { slug } = Route.useParams()
   const { data: article } = useSuspenseQuery(articleBySlugQueryOptions(slug))
   const tableOfContents = useMemo(
-    () => (article ? extractTableOfContents(article.content) : []),
+    () => (article ? getArticleTableOfContents(article) : []),
     [article]
   )
   const shouldReduceMotion = useReducedMotion()
   const isPageAnimationReady = usePageAnimationReady()
+  const goBack = useBackNavigation()
 
   if (!article) {
     return (
@@ -63,6 +64,7 @@ function ArticleDetailPage() {
         <motion.div {...reveal(0.03)} className='xl:hidden'>
           <Link
             to='/articles'
+            onClick={goBack}
             className='group inline-flex items-center gap-1.5 text-sm text-gray-500 transition-colors hover:text-gray-900'
           >
             <ArrowLeft
@@ -86,12 +88,12 @@ function ArticleDetailPage() {
             {...reveal(0.07)}
             src={article.bannerImage}
             alt=''
-            className='w-full rounded-lg border border-gray-200 object-cover'
+            className='w-full rounded-lg object-cover'
             loading='eager'
           />
         ) : null}
-        <motion.div {...reveal(0.09)} className='prose max-w-none'>
-          <ArticleMarkdown markdown={article.content} />
+        <motion.div {...reveal(0.09)} className='article-prose prose max-w-none'>
+          <ArticleBody article={article} />
         </motion.div>
       </motion.article>
     </>

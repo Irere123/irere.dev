@@ -41,11 +41,11 @@ function KigaliTime() {
 
 export function Footer() {
   return (
-    <footer className='flex justify-between gap-2 sm:px-0 px-2 text-sm text-gray-500 max-w-2xl mx-auto w-full py-4 border-t border-gray-200'>
+    <footer className='mx-auto flex w-full max-w-2xl justify-between gap-2 px-4 py-4 text-sm text-gray-500 sm:px-6'>
       <p>
         <KigaliTime />
       </p>
-      <p className='text-gray-500 rounded-full bg-gray-100 px-2 py-1'>v4.0</p>
+      <p>v4.0</p>
     </footer>
   )
 }

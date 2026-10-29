@@ -1,3 +1,4 @@
+import type { Schema } from 'hast-util-sanitize'
 import { useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -11,7 +12,7 @@ import { createHeadingIdFactory } from './toc-utils'
 // parses that into real elements instead of literal text, and rehype-sanitize then strips
 // anything unsafe or presentational (scripts, event handlers, inline styles) so arbitrary
 // CMS output can never break the page or its typography.
-const sanitizeSchema = {
+export const sanitizeSchema: Schema = {
   ...defaultSchema,
   tagNames: [...new Set([...(defaultSchema.tagNames ?? []), 'u', 'mark', 'kbd'])],
   attributes: {

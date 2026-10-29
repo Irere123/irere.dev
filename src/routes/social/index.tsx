@@ -73,16 +73,10 @@ function SocialLegalIndexPage() {
         <p>The two documents below govern your use of it.</p>
       </motion.div>
 
-      <motion.ul
-        className='mt-8 flex flex-col divide-y divide-gray-200 border-t border-b border-gray-200'
-        {...reveal(0.09)}
-      >
+      <motion.ul className='mt-6 flex flex-col' {...reveal(0.09)}>
         {documents.map((document) => (
           <li key={document.to}>
-            <Link
-              to={document.to}
-              className='group flex flex-col gap-0.5 py-4 transition-opacity hover:opacity-70'
-            >
+            <Link to={document.to} className='group flex flex-col gap-0.5 py-3'>
               <span className='text-[15px] font-medium text-gray-900 underline decoration-gray-300 underline-offset-4 group-hover:decoration-gray-900'>
                 {document.title}
               </span>

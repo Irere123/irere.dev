@@ -7,9 +7,9 @@ import { parseAsString, useQueryState } from 'nuqs'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
 import { archiveArticlesInfiniteQueryOptions } from '@/lib/article-queries'
+import { useBackNavigation } from '@/lib/use-back-navigation'
 import { usePageAnimationReady } from '@/lib/use-page-animation-ready'
-import { type Article, getReadingTimeMinutes, getYear, isoDateToDate } from '@/lib/work'
-import { RoughUnderline } from '@/svg/rough-underline'
+import { type Article, getYear, isoDateToDate } from '@/lib/work'
 
 export const Route = createFileRoute('/articles/')({
   loader: async ({ context }) => {
@@ -23,7 +23,7 @@ function matchesQuery(article: Article, query: string) {
   if (!needle) {
     return true
   }
-  return [article.title, article.summary, article.content].some((field) =>
+  return [article.title, article.summary, article.excerpt].some((field) =>
     field.toLowerCase().includes(needle)
   )
 }
@@ -35,27 +35,18 @@ function ArticlesArchivePage() {
   const articles = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data])
   const shouldReduceMotion = useReducedMotion()
   const isPageAnimationReady = usePageAnimationReady()
+  const goBack = useBackNavigation()
 
   const [query, setQuery] = useQueryState('q', parseAsString.withDefault(''))
-  const [year, setYear] = useQueryState('year', parseAsString.withDefault(''))
-  const isFiltering = query.trim() !== '' || year !== ''
-
-  const years = useMemo(
-    () => [...new Set(articles.map((article) => getYear(article.publishedAt)))],
-    [articles]
-  )
+  const isFiltering = query.trim() !== ''
 
   const filteredArticles = useMemo(
-    () =>
-      articles.filter(
-        (article) =>
-          (year === '' || getYear(article.publishedAt) === year) && matchesQuery(article, query)
-      ),
-    [articles, query, year]
+    () => articles.filter((article) => matchesQuery(article, query)),
+    [articles, query]
   )
 
-  // Filters apply client-side, so results are only complete once every page is loaded.
-  // Pull the remaining pages in as soon as a filter becomes active.
+  // Search applies client-side, so results are only complete once every page is loaded.
+  // Pull the remaining pages in as soon as a search starts.
   useEffect(() => {
     if (isFiltering && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
@@ -86,11 +77,6 @@ function ArticlesArchivePage() {
 
     return () => observer.disconnect()
   }, [hasNextPage, isFetchingNextPage, fetchNextPage])
-
-  const clearFilters = () => {
-    setQuery(null)
-    setYear(null)
-  }
 
   const entranceTransition = shouldReduceMotion
     ? { duration: 0.14, ease: 'easeOut' as const }
@@ -135,6 +121,7 @@ function ArticlesArchivePage() {
         <Link
           to='/'
           search={{ work: 'articles' }}
+          onClick={goBack}
           className='group inline-flex items-center gap-1.5 text-sm text-gray-500 transition-colors hover:text-gray-900'
         >
           <ArrowLeft
@@ -154,7 +141,7 @@ function ArticlesArchivePage() {
         <div className='relative'>
           <Search
             aria-hidden
-            className='pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-gray-400'
+            className='pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-gray-500'
           />
           <input
             type='search'
@@ -162,7 +149,7 @@ function ArticlesArchivePage() {
             onChange={(event) => setQuery(event.target.value || null)}
             placeholder='Search articles…'
             aria-label='Search articles'
-            className='w-full appearance-none rounded-full border border-gray-200/80 bg-white py-2.5 pl-10 pr-10 text-sm text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] outline-none transition placeholder:text-gray-400 focus:border-gray-300 focus:ring-4 focus:ring-gray-900/[0.03] [&::-webkit-search-cancel-button]:hidden'
+            className='w-full appearance-none rounded-full bg-white py-2.5 pl-10 pr-10 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:ring-1 focus:ring-gray-900 [&::-webkit-search-cancel-button]:hidden'
           />
           <AnimatePresence>
             {query !== '' ? (
@@ -174,46 +161,13 @@ function ArticlesArchivePage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.12, ease: 'easeOut' }}
-                className='absolute right-2.5 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700'
+                className='absolute right-2.5 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-900'
               >
                 <X aria-hidden className='size-3.5' />
               </motion.button>
             ) : null}
           </AnimatePresence>
         </div>
-        {years.length > 0 ? (
-          <div className='flex flex-wrap items-center gap-1.5'>
-            {['', ...years].map((value) => {
-              const isActive = year === value
-
-              return (
-                <button
-                  key={value || 'all'}
-                  type='button'
-                  onClick={() => setYear(value || null)}
-                  className={`relative rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                    isActive
-                      ? 'border-transparent text-white'
-                      : 'border-gray-200/80 bg-white text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  {isActive ? (
-                    <motion.span
-                      layoutId='year-chip'
-                      className='absolute inset-0 rounded-full bg-gray-900'
-                      transition={
-                        shouldReduceMotion
-                          ? { duration: 0 }
-                          : { type: 'spring' as const, stiffness: 380, damping: 32, mass: 0.6 }
-                      }
-                    />
-                  ) : null}
-                  <span className='relative z-1'>{value || 'All'}</span>
-                </button>
-              )
-            })}
-          </div>
-        ) : null}
       </motion.div>
       <motion.div
         className='flex flex-col'
@@ -231,12 +185,9 @@ function ArticlesArchivePage() {
               {showYear ? (
                 <motion.div
                   variants={rowVariants}
-                  className={`mb-2 flex items-center gap-3 text-sm text-gray-400 ${
-                    index > 0 ? 'mt-8' : ''
-                  }`}
+                  className={`mb-1 text-sm text-gray-500 ${index > 0 ? 'mt-8' : ''}`}
                 >
                   {articleYear}
-                  <span aria-hidden className='h-px flex-1 bg-gray-200' />
                 </motion.div>
               ) : null}
               <motion.div variants={rowVariants}>
@@ -244,31 +195,16 @@ function ArticlesArchivePage() {
                   to='/articles/$slug'
                   params={{ slug: article.slug }}
                   preload='intent'
-                  className='group -mx-3 flex flex-col gap-1 rounded-xl px-3 py-3 transition hover:bg-white hover:shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
+                  className='-mx-3 flex flex-col gap-1 rounded-xl px-3 py-3 transition-colors hover:bg-white'
                 >
-                  <div className='flex items-center gap-2'>
-                    <span className='font-medium break-words text-gray-900'>{article.title}</span>
-                    {article.isNew ? (
-                      <span
-                        className='rough-annotation relative ml-1 inline-flex min-w-11 shrink-0 items-center justify-center px-2.5 py-1.5 text-xs font-medium'
-                        style={{ color: 'rgb(34, 197, 94)' }}
-                      >
-                        <span className='relative z-1'>New</span>
-                        <RoughUnderline
-                          className='absolute inset-0 min-w-11'
-                          stroke='rgb(34, 197, 94)'
-                        />
-                      </span>
-                    ) : null}
-                  </div>
+                  <span className='font-medium break-words text-gray-900'>{article.title}</span>
                   {article.summary ? (
                     <p className='line-clamp-2 text-sm leading-relaxed text-gray-500'>
                       {article.summary}
                     </p>
                   ) : null}
-                  <p className='text-xs text-gray-400'>
-                    {format(isoDateToDate(article.publishedAt), 'MMM d')} ·{' '}
-                    {getReadingTimeMinutes(article.content)} min read
+                  <p className='text-xs text-gray-500'>
+                    {format(isoDateToDate(article.publishedAt), 'MMM d')}
                   </p>
                 </Link>
               </motion.div>
@@ -278,15 +214,13 @@ function ArticlesArchivePage() {
       </motion.div>
       {filteredArticles.length === 0 && isFiltering && !isFetchingNextPage ? (
         <div className='flex flex-col items-start gap-2'>
-          <p className='text-sm text-gray-500'>
-            No articles match {query.trim() ? `“${query.trim()}”` : 'these filters'}.
-          </p>
+          <p className='text-sm text-gray-500'>No articles match “{query.trim()}”.</p>
           <button
             type='button'
-            onClick={clearFilters}
-            className='text-sm text-gray-900 underline underline-offset-4 transition-colors hover:text-gray-600'
+            onClick={() => setQuery(null)}
+            className='text-sm text-gray-900 underline underline-offset-4 transition-colors hover:text-gray-500'
           >
-            Clear filters
+            Clear search
           </button>
         </div>
       ) : null}

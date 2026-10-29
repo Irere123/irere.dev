@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
-import { env } from 'cloudflare:workers'
 import { z } from 'zod'
 
 import type { Article } from '@/lib/work'
+import { env } from 'cloudflare:workers'
 
 // These functions are the ONLY place that talks to api.irere.dev. They are wrapped in
 // `createServerFn`, so their bodies (and the Bearer token they read from `env`) only ever
@@ -11,7 +11,6 @@ import type { Article } from '@/lib/work'
 
 const API_BASE_URL = 'https://api.irere.dev/v1'
 const RECENT_LIMIT = 5
-const NEW_ARTICLE_WINDOW_DAYS = 14
 
 // The API's `limit` query validator is `z.number()` (no coercion), but query params arrive
 // as strings — so any `?limit=…` 400s with "expected number, received string". Until the
@@ -26,6 +25,8 @@ const apiPostSchema = z.object({
   subtitle: z.string().nullish(),
   status: z.enum(['DRAFT', 'PUBLISHED']).nullish(),
   markdown: z.string().nullish(),
+  html: z.string().nullish(),
+  excerpt: z.string().nullish(),
   bannerImage: z.string().nullish(),
   scheduledDate: z.string().nullish(),
   publishedDate: z.string().nullish(),
@@ -81,25 +82,18 @@ function toIsoDate(value: string): string {
   return value.slice(0, 10)
 }
 
-function isRecentlyPublished(isoDate: string): boolean {
-  const publishedAt = new Date(isoDate).getTime()
-  if (Number.isNaN(publishedAt)) {
-    return false
-  }
-  const ageMs = Date.now() - publishedAt
-  return ageMs >= 0 && ageMs <= NEW_ARTICLE_WINDOW_DAYS * 24 * 60 * 60 * 1000
-}
-
+// List responses carry no body; only `/posts/slug/:slug` returns one. Prefer markdown, and
+// fall back to the HTML the API currently serves in its place.
 function toArticle(post: ApiPost): Article {
-  const publishedAt = toIsoDate(post.publishedDate ?? post.createdAt)
   return {
     slug: post.slug ?? post.id,
     title: post.title ?? 'Untitled',
     summary: post.subtitle ?? '',
-    content: post.markdown ?? '',
+    excerpt: post.excerpt ?? '',
+    content: post.markdown || post.html || '',
+    contentFormat: post.markdown ? 'markdown' : 'html',
     bannerImage: post.bannerImage ?? undefined,
-    publishedAt,
-    isNew: isRecentlyPublished(publishedAt),
+    publishedAt: toIsoDate(post.publishedDate ?? post.createdAt),
   }
 }
 
@@ -109,10 +103,22 @@ function sortByPublishedDesc(articles: Article[]): Article[] {
 
 /** Newest published articles for the homepage list. */
 export const fetchRecentArticles = createServerFn({ method: 'GET' }).handler(async () => {
-  const params = new URLSearchParams({ status: 'PUBLISHED' })
-  const json = await apiFetch(`/documents?${params.toString()}`)
-  const { data } = documentsResponseSchema.parse(json)
-  return sortByPublishedDesc(data.map(toArticle)).slice(0, RECENT_LIMIT)
+  // Pages aren't ordered by publish date, so collect every page before picking the newest.
+  const posts: ApiPost[] = []
+  let cursor: string | null | undefined
+
+  do {
+    const params = new URLSearchParams({ status: 'PUBLISHED' })
+    if (cursor) {
+      params.set('cursor', cursor)
+    }
+    const json = await apiFetch(`/documents?${params.toString()}`)
+    const { data, nextCursor } = documentsResponseSchema.parse(json)
+    posts.push(...data)
+    cursor = nextCursor
+  } while (cursor)
+
+  return sortByPublishedDesc(posts.map(toArticle)).slice(0, RECENT_LIMIT)
 })
 
 /** One cursor-paginated page of published articles for the archive. */

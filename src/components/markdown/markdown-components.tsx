@@ -31,7 +31,7 @@ function MarkdownLink({ href, children, ...props }: AnchorProps) {
       href={href}
       target={isExternal ? '_blank' : undefined}
       rel={isExternal ? 'noopener noreferrer' : undefined}
-      className='font-medium text-gray-900 underline underline-offset-4 hover:text-gray-600'
+      className='font-medium text-gray-900 underline underline-offset-4 hover:text-gray-500'
       {...props}
     >
       {children}
@@ -85,13 +85,13 @@ export function createArticleMarkdownComponents({
       <img
         alt={alt ?? ''}
         loading='lazy'
-        className='my-6 w-full rounded-lg border border-gray-200 object-cover'
+        className='my-6 w-full rounded-lg object-cover'
         {...props}
       />
     ),
     blockquote: (props) => (
       <blockquote
-        className='my-6 border-l-4 border-gray-300 pl-4 text-base text-gray-700 italic'
+        className='my-6 border-l-2 border-gray-300 pl-4 text-base text-gray-700'
         {...props}
       />
     ),
@@ -99,7 +99,7 @@ export function createArticleMarkdownComponents({
     a: MarkdownLink,
     pre: (props) => (
       <pre
-        className='my-6 overflow-x-auto rounded-lg border border-gray-200 bg-gray-900 p-4 text-sm text-gray-100'
+        className='my-6 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100'
         {...props}
       />
     ),

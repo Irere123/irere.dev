@@ -40,10 +40,7 @@ export function LegalShell({ children, title, sibling }: LegalShellProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={entranceTransition}
     >
-      <motion.header
-        className='flex flex-col gap-1 border-b border-gray-200 pb-8'
-        {...reveal(0.03)}
-      >
+      <motion.header className='flex flex-col gap-1' {...reveal(0.03)}>
         <p className='text-sm text-gray-500'>{productName}</p>
         <h1 className='text-xl font-bold text-gray-900 sm:text-2xl'>{title}</h1>
         <p className='text-sm text-gray-500'>Last updated {lastUpdated}</p>
@@ -56,7 +53,7 @@ export function LegalShell({ children, title, sibling }: LegalShellProps) {
         {children}
       </motion.div>
 
-      <motion.footer className='mt-12 border-t border-gray-200 pt-6' {...reveal(0.09)}>
+      <motion.footer className='mt-12' {...reveal(0.09)}>
         <Link to={sibling.to} className={`text-sm ${linkClassName}`}>
           {sibling.label}
         </Link>

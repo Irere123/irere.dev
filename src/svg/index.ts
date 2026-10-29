@@ -1,5 +1,4 @@
 export * from './chef-hat'
 export * from './geometry'
 export * from './notebook'
-export * from './rough-underline'
 export * from './twitter'

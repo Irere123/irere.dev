@@ -128,9 +128,8 @@ function App() {
         transition={{ staggerChildren: shouldReduceMotion ? 0 : 0.06 }}
       >
         <motion.p variants={copyVariants}>
-          I'm a software engineer with a{' '}
-          <span className='font-serif font-medium'>design centric approach</span>. I love to build
-          products. Currently working on{' '}
+          I'm a software engineer with a design centric approach. I love to build products.
+          Currently working on{' '}
           <a href='https://daisy.now' className='underline underline-offset-4'>
             Daisy
           </a>
