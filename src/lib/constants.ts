@@ -23,12 +23,3 @@ export const COLLECTION_PROJECTS: CollectionProject[] = [
     href: 'https://x.com/codesdoes',
   },
 ]
-
-export const SCALE = 1.22
-export const DISTANCE = 90
-export const NUDGE = 14
-export const SPRING_CONFIG = () => ({
-  mass: 0.14,
-  stiffness: 240,
-  damping: 24,
-})
